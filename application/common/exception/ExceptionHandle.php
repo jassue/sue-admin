@@ -30,7 +30,7 @@ class ExceptionHandle extends Handle
                 'message'   => '数据验证失败'
             ]);
         }
-        if ($e instanceof BusinessExceptio1n) {
+        if ($e instanceof BusinessException) {
             Log::close();
             return json([
                 'code'  => $e->getCode(),

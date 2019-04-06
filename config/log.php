@@ -18,13 +18,15 @@ return [
     // 日志保存目录
     'path'        => '',
     // 日志记录级别
-    'level'       => [],
+    'level'       => ['error','alert'],
     // 单文件日志写入
-    'single'      => false,
+    'single'      => true,
     // 独立日志级别
     'apart_level' => [],
     // 最大日志文件数量
-    'max_files'   => 0,
+    'max_files'   => 30,
     // 是否关闭日志写入
     'close'       => false,
+    // 文件大小限制
+    'file_size' => 1024*1024*10,
 ];
