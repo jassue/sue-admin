@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{block name="title"}{/block} - {$Think.Config.app.app_name}</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  {include file="layout/css" /}
+  {block name="css"}{/block}
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+  {include file="layout/header" /}
+  {include file="layout/sidebar" /}
+  <div class="content-wrapper">
+    <section class="content-header">
+      <h1>
+        Page Header
+        <small>Optional description</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+        <li class="active">Here</li>
+      </ol>
+    </section>
+    <section class="content container-fluid">
+      {block name="body"}{/block}
+    </section>
+  </div>
+  {include file="layout/footer" /}
+</div>
+{include file="layout/js" /}
+{block name="js"}{/block}
+</body>
+</html>

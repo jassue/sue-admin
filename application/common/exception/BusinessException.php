@@ -18,7 +18,7 @@ class BusinessException extends Exception
      * @param string $message
      * @param int $code
      */
-    public function __construct($message = null, int $code = ExceptionCode::CODE_DEFAULT)
+    public function __construct($message = null, $code = ExceptionCode::CODE_DEFAULT)
     {
         parent::__construct($message, $code, null);
     }

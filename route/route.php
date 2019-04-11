@@ -10,4 +10,6 @@
 // +----------------------------------------------------------------------
 use think\facade\Route;
 
-Route::get('/', 'index/index/index');
+Route::group('admin', function () {
+    Route::get('/', 'Index/index');
+})->prefix('admin/');

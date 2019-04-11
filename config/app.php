@@ -15,11 +15,11 @@
 
 return [
     // 应用名称
-    'app_name'               => '',
+    'app_name'               => 'sue-admin',
     // 应用地址
     'app_host'               => '',
     // 应用调试模式
-    'app_debug'              => false,
+    'app_debug'              => true,
     // 应用Trace
     'app_trace'              => false,
     // 是否支持多模块
@@ -95,7 +95,7 @@ return [
     // URL参数方式 0 按名称成对解析 1 按顺序解析
     'url_param_type'         => 0,
     // 是否开启路由延迟解析
-    'url_lazy_route'         => false,
+    'url_lazy_route'         => true,
     // 是否强制使用路由
     'url_route_must'         => true,
     // 合并路由规则
