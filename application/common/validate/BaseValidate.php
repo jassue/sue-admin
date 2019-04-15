@@ -16,17 +16,28 @@ use app\common\exception\ExceptionCode;
 
 class BaseValidate extends Validate
 {
-    public function goCheck(string $scene = '')
+    /**
+     * @param string $scene
+     * @param bool $batch
+     * @return bool
+     */
+    public function goCheck(string $scene = '',bool $batch = true)
     {
         $params = Request::param();
-        $result = $this->scene($scene)->batch()->check($params);
-        if (!$result) {
+        if ($batch)
+            $result = $this->scene($scene)->batch()->check($params);
+        else
+            $result = $this->scene($scene)->check($params);
+        if (!$result)
             throw new ValidateException($this->error, ExceptionCode::CODE_VALIDATE_ERROR);
-        } else {
+        else
             return true;
-        }
     }
 
+    /**
+     * @param array $arrays
+     * @return array
+     */
     public function getDataByRule(array $arrays)
     {
         $newArray = [];
@@ -36,9 +47,38 @@ class BaseValidate extends Validate
         return $newArray;
     }
 
+    /**
+     * @param array $arrays
+     * @param string $scene
+     * @return array
+     */
     public function checkWithGetDataByRule(array $arrays, string $scene = '')
     {
         $this->goCheck($scene);
         return $this->getDataByRule($arrays);
+    }
+
+    /**
+     * @param $value
+     * @param $rule
+     * @param $data
+     * @param $field
+     * @return bool
+     */
+    protected function exists($value, $rule, $data, $field)
+    {
+        $rules = explode(',', $rule);
+        $count = count($rules);
+        if ($count == 1) {
+            $where[] = [$field, '=', $value];
+        } else {
+            $where[] = [$rules[1], '=', $value];
+        }
+        if ($count == 3) {
+            $where[] = ['id', '<>', $rules[2]];
+        } elseif ($count == 4) {
+            $where[] = [$rules[3], '<>', $rules[2]];
+        }
+        return model($rules[0])->where($where)->count() > 0 ? true : false;
     }
 }

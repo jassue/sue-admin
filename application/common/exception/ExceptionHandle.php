@@ -26,8 +26,8 @@ class ExceptionHandle extends Handle
             Log::close();
             return json([
                 'code'  => ExceptionCode::CODE_VALIDATE_ERROR,
-                'data'  => $e->getError(),
-                'message'   => '数据验证失败'
+                'data'  => null,
+                'message'   => $e->getError()
             ]);
         }
         if ($e instanceof BusinessException) {
