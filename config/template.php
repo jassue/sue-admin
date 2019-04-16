@@ -36,5 +36,6 @@ return [
     'tpl_replace_string' => [
         '__ADMIN__'=>'/static/admin',
         '__COMPONENTS__' => '/static/components',
+        '__PLUGINS__' => '/static/plugins'
     ],
 ];

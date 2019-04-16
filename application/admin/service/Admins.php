@@ -11,6 +11,7 @@ namespace app\admin\service;
 
 use app\common\enum\BaseStatus;
 use app\common\model\Admin;
+use think\facade\Session;
 
 class Admins
 {
@@ -50,5 +51,35 @@ class Admins
             $insertData[] = ['role_id' => $roleId];
         }
         $admin->roleRelation()->saveAll($insertData);
+    }
+
+    /**
+     * @param string $username
+     * @return array|\PDOStatement|string|\think\Model
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function getByUsername(string $username)
+    {
+        return Admin::where('username', $username)->findOrEmpty();
+    }
+
+    /**
+     * @param Admin $admin
+     * @param string $password
+     * @return bool
+     */
+    public function checkPassword(Admin $admin, string $password)
+    {
+        return $admin->checkPassword($password);
+    }
+
+    /**
+     * @param Admin $admin
+     */
+    public function login(Admin $admin)
+    {
+        Session::set('admin', $admin);
     }
 }

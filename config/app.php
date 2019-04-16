@@ -15,7 +15,7 @@
 
 return [
     // 应用名称
-    'app_name'               => 'sue-admin',
+    'app_name'               => 'SueAdmin',
     // 应用地址
     'app_host'               => '',
     // 应用调试模式
@@ -31,7 +31,7 @@ return [
     // 默认输出类型
     'default_return_type'    => 'html',
     // 默认AJAX 数据返回格式,可选json xml ...
-    'default_ajax_return'    => 'json',
+    'default_ajax_return'    => 'string',
     // 默认JSONP格式返回的处理方法
     'default_jsonp_handler'  => 'jsonpReturn',
     // 默认JSONP处理方法

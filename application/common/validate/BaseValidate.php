@@ -75,9 +75,9 @@ class BaseValidate extends Validate
             $where[] = [$rules[1], '=', $value];
         }
         if ($count == 3) {
-            $where[] = ['id', '<>', $rules[2]];
+            $where[] = ['id', '=', $rules[2]];
         } elseif ($count == 4) {
-            $where[] = [$rules[3], '<>', $rules[2]];
+            $where[] = [$rules[3], '=', $rules[2]];
         }
         return model($rules[0])->where($where)->count() > 0 ? true : false;
     }
