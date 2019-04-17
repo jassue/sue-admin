@@ -11,5 +11,7 @@ namespace app\common\model;
 
 class AdminRule extends BaseModel
 {
-
+    protected $hidden = [
+        'pivot'
+    ];
 }

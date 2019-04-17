@@ -11,11 +11,23 @@ namespace app\common\model;
 
 class AdminRole extends BaseModel
 {
+    protected $hidden = [
+        'pivot'
+    ];
+
     /**
      * @return \think\model\relation\HasMany
      */
     public function ruleRelation()
     {
         return $this->hasMany(AdminRoleRuleRelation::class, 'role_id', 'id');
+    }
+
+    /**
+     * @return \think\model\relation\BelongsToMany
+     */
+    public function rules()
+    {
+        return $this->belongsToMany(AdminRule::class, AdminRoleRuleRelation::class, 'rule_id', 'role_id');
     }
 }

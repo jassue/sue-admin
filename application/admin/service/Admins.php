@@ -46,11 +46,7 @@ class Admins
      */
     public function bindRoles(Admin $admin, array $roleIds)
     {
-        $insertData = [];
-        foreach ($roleIds as $roleId) {
-            $insertData[] = ['role_id' => $roleId];
-        }
-        $admin->roleRelation()->saveAll($insertData);
+        $admin->roles()->saveAll($roleIds);
     }
 
     /**

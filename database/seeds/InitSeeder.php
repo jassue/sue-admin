@@ -19,8 +19,28 @@ class InitSeeder extends Seeder
     {
         $admin = Admins::create('admin', '123456', '');
         $role = AdminRoles::create('超级管理员');
-        $rule = AdminRules::create(0, '超级管理员', 'all');
-        Admins::bindRoles($admin, [$role->id]);
-        AdminRoles::allocationRules($role, [$rule->id]);
+        Admins::bindRoles($admin, [1]);
+        AdminRules::createMany([
+            ['id'=>1, 'parent_id'=>0, 'title'=>'超级管理员', 'name'=>'ALL'],
+            ['id'=>2, 'parent_id'=>1, 'title'=>'权限控制', 'name'=>'ACCESS_CONTROL'],
+            ['id'=>3, 'parent_id'=>2, 'title'=>'后台菜单', 'name'=>'ADMIN_MENU_LIST'],
+            ['id'=>4, 'parent_id'=>3, 'title'=>'添加菜单', 'name'=>'CREATE_ADMIN_MENU'],
+            ['id'=>5, 'parent_id'=>3, 'title'=>'编辑菜单', 'name'=>'EDIT_ADMIN_MENU'],
+            ['id'=>6, 'parent_id'=>3, 'title'=>'删除菜单', 'name'=>'DELETE_ADMIN_MENU'],
+            ['id'=>7, 'parent_id'=>2, 'title'=>'管理角色', 'name'=>'ROLE_LIST'],
+            ['id'=>8, 'parent_id'=>7, 'title'=>'添加角色', 'name'=>'CREATE_ROLE'],
+            ['id'=>9, 'parent_id'=>7, 'title'=>'编辑角色', 'name'=>'EDIT_ROLE'],
+            ['id'=>10, 'parent_id'=>7, 'title'=>'分配权限', 'name'=>'ALLOCATION_RULE'],
+            ['id'=>11, 'parent_id'=>7, 'title'=>'删除角色', 'name'=>'DELETE_ROLE'],
+            ['id'=>12, 'parent_id'=>2, 'title'=>'管理员', 'name'=>'ADMIN_LIST'],
+            ['id'=>13, 'parent_id'=>12, 'title'=>'添加管理员', 'name'=>'CREATE_ADMIN'],
+            ['id'=>14, 'parent_id'=>12, 'title'=>'编辑管理员', 'name'=>'EDIT_ADMIN'],
+            ['id'=>15, 'parent_id'=>12, 'title'=>'删除管理员', 'name'=>'ADMIN_MANAGE'],
+            ['id'=>16, 'parent_id'=>2, 'title'=>'权限列表', 'name'=>'RULE_LIST'],
+            ['id'=>17, 'parent_id'=>16, 'title'=>'添加权限', 'name'=>'CREATE_RULE'],
+            ['id'=>18, 'parent_id'=>16, 'title'=>'编辑权限', 'name'=>'EDIT_RULE'],
+            ['id'=>19, 'parent_id'=>16, 'title'=>'删除权限', 'name'=>'DELETE_RULE'],
+        ]);
+        AdminRoles::allocationRules($role, [1]);
     }
 }

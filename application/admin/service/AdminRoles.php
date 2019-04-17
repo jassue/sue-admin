@@ -41,10 +41,6 @@ class AdminRoles
      */
     public function allocationRules(AdminRole $adminRole, array $ruleIds)
     {
-        $insertData = [];
-        foreach ($ruleIds as $ruleId) {
-            $insertData[] = ['rule_id' => $ruleId];
-        }
-        $adminRole->ruleRelation()->saveAll($insertData);
+        $adminRole->rules()->saveAll($ruleIds);
     }
 }

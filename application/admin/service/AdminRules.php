@@ -24,16 +24,26 @@ class AdminRules
 
     /**
      * @param int $parentId
+     * @param string $title
      * @param string $name
-     * @param string $url
      * @return AdminRule
      */
-    public function create(int $parentId, string $name, string $url)
+    public function create(int $parentId, string $title, string $name)
     {
         return AdminRule::create([
             'parent_id' => $parentId,
-            'name' => $name,
-            'url' => $url
+            'title' => $title,
+            'name' => $name
         ]);
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     * @throws \Exception
+     */
+    public function createMany(array $data)
+    {
+        return (new AdminRule)->saveAll($data, false)->column('id');
     }
 }

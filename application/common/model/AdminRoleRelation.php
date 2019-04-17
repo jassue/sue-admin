@@ -9,7 +9,9 @@
 namespace app\common\model;
 
 
-class AdminRoleRelation extends BaseModel
-{
+use think\model\Pivot;
 
+class AdminRoleRelation extends Pivot
+{
+    protected $autoWriteTimestamp = 'datetime';
 }

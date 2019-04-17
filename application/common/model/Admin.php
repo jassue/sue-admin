@@ -12,18 +12,11 @@ namespace app\common\model;
 class Admin extends BaseUser
 {
     /**
-     * @return \think\model\relation\HasMany
-     */
-    public function roleRelation()
-    {
-        return $this->hasMany(AdminRoleRelation::class, 'admin_id', 'id');
-    }
-    /**
      * @return \think\model\relation\BelongsToMany
      */
-    public function role()
+    public function roles()
     {
-        return $this->belongsToMany(AdminRole::class, 'admin_role_relation', 'admin_id', 'id');
+        return $this->belongsToMany(AdminRole::class, AdminRoleRelation::class, 'role_id', 'admin_id');
     }
 
 }

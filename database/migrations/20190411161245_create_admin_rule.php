@@ -32,10 +32,11 @@ class CreateAdminRule extends Migrator
             ->setId(false)->setPrimaryKey('id')->setEngine('InnoDB')
             ->addColumn('id', 'biginteger', ['identity'=>true, 'signed'=>false])
             ->addColumn('parent_id', 'biginteger', ['signed'=>false, 'default'=>0])
-            ->addColumn('name', 'string', ['limit'=>20, 'default'=>''])
-            ->addColumn('url', 'string', ['limit'=>80, 'default'=>''])
+            ->addColumn('title', 'string', ['limit'=>20, 'default'=>''])
+            ->addColumn('name', 'string', ['limit'=>40, 'default'=>''])
             ->addTimestamps()
             ->addIndex('parent_id')
+            ->addIndex('name', ['unique'=>true])
             ->create();
     }
 
