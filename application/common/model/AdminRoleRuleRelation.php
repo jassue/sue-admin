@@ -13,5 +13,5 @@ use think\model\Pivot;
 
 class AdminRoleRuleRelation extends Pivot
 {
-    protected $autoWriteTimestamp = 'datetime';
+    protected $autoWriteTimestamp = true;
 }

@@ -37,7 +37,8 @@ class CreateAdminMenu extends Migrator
             ->addColumn('url', 'string', ['limit'=>80, 'default'=>''])
             ->addColumn('auth', 'string', ['limit'=>40, 'default'=>''])
             ->addColumn('sort', 'integer', ['length'=>255, 'default'=>0, 'signed'=>false])
-            ->addTimestamps()
+            ->addColumn('create_time', 'integer', ['limit'=>10, 'signed'=>false])
+            ->addColumn('update_time', 'integer', ['limit'=>10, 'signed'=>false])
             ->addIndex('parent_id')
             ->create();
     }

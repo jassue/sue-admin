@@ -33,7 +33,8 @@ class CreateAdminRoleRelation extends Migrator
             ->addColumn('id', 'biginteger', ['identity'=>true, 'signed'=>false])
             ->addColumn('admin_id', 'biginteger', ['signed'=>false])
             ->addColumn('role_id', 'biginteger', ['signed'=>false])
-            ->addTimestamps()
+            ->addColumn('create_time', 'integer', ['limit'=>10, 'signed'=>false])
+            ->addColumn('update_time', 'integer', ['limit'=>10, 'signed'=>false])
             ->addIndex(['admin_id','role_id'])
             ->create();
     }

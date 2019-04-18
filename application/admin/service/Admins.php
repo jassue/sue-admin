@@ -11,7 +11,6 @@ namespace app\admin\service;
 
 use app\common\enum\BaseStatus;
 use app\common\model\Admin;
-use think\facade\Session;
 
 class Admins
 {
@@ -69,13 +68,5 @@ class Admins
     public function checkPassword(Admin $admin, string $password)
     {
         return $admin->checkPassword($password);
-    }
-
-    /**
-     * @param Admin $admin
-     */
-    public function login(Admin $admin)
-    {
-        Session::set('admin', $admin);
     }
 }

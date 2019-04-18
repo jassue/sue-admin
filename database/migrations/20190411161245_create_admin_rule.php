@@ -34,7 +34,8 @@ class CreateAdminRule extends Migrator
             ->addColumn('parent_id', 'biginteger', ['signed'=>false, 'default'=>0])
             ->addColumn('title', 'string', ['limit'=>20, 'default'=>''])
             ->addColumn('name', 'string', ['limit'=>40, 'default'=>''])
-            ->addTimestamps()
+            ->addColumn('create_time', 'integer', ['limit'=>10, 'signed'=>false])
+            ->addColumn('update_time', 'integer', ['limit'=>10, 'signed'=>false])
             ->addIndex('parent_id')
             ->addIndex('name', ['unique'=>true])
             ->create();

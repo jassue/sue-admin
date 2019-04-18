@@ -33,7 +33,8 @@ class CreateAdminRole extends Migrator
             ->addColumn('id', 'biginteger', ['identity'=>true, 'signed'=>false])
             ->addColumn('name', 'string', ['limit'=>20, 'default'=>''])
             ->addColumn('status', 'boolean', ['limit'=>1, 'default'=>1, 'signed'=>false])
-            ->addTimestamps()
+            ->addColumn('create_time', 'integer', ['limit'=>10, 'signed'=>false])
+            ->addColumn('update_time', 'integer', ['limit'=>10, 'signed'=>false])
             ->create();
     }
 
