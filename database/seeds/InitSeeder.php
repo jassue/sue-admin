@@ -4,6 +4,7 @@ use think\migration\Seeder;
 use \app\admin\facade\Admins;
 use \app\admin\facade\AdminRoles;
 use \app\admin\facade\AdminRules;
+use \app\admin\facade\AdminMenus;
 
 class InitSeeder extends Seeder
 {
@@ -22,12 +23,12 @@ class InitSeeder extends Seeder
         Admins::bindRoles($admin, [1]);
         AdminRules::createMany([
             ['id'=>1, 'parent_id'=>0, 'title'=>'超级管理员', 'name'=>'ALL'],
-            ['id'=>2, 'parent_id'=>1, 'title'=>'权限控制', 'name'=>'ACCESS_CONTROL'],
+            ['id'=>2, 'parent_id'=>1, 'title'=>'权限管理', 'name'=>'ACCESS_MANAGE'],
             ['id'=>3, 'parent_id'=>2, 'title'=>'后台菜单', 'name'=>'ADMIN_MENU_LIST'],
             ['id'=>4, 'parent_id'=>3, 'title'=>'添加菜单', 'name'=>'CREATE_ADMIN_MENU'],
             ['id'=>5, 'parent_id'=>3, 'title'=>'编辑菜单', 'name'=>'EDIT_ADMIN_MENU'],
             ['id'=>6, 'parent_id'=>3, 'title'=>'删除菜单', 'name'=>'DELETE_ADMIN_MENU'],
-            ['id'=>7, 'parent_id'=>2, 'title'=>'管理角色', 'name'=>'ROLE_LIST'],
+            ['id'=>7, 'parent_id'=>2, 'title'=>'角色管理', 'name'=>'ROLE_LIST'],
             ['id'=>8, 'parent_id'=>7, 'title'=>'添加角色', 'name'=>'CREATE_ROLE'],
             ['id'=>9, 'parent_id'=>7, 'title'=>'编辑角色', 'name'=>'EDIT_ROLE'],
             ['id'=>10, 'parent_id'=>7, 'title'=>'分配权限', 'name'=>'ALLOCATION_RULE'],
@@ -42,5 +43,13 @@ class InitSeeder extends Seeder
             ['id'=>19, 'parent_id'=>16, 'title'=>'删除权限', 'name'=>'DELETE_RULE'],
         ]);
         AdminRoles::allocationRules($role, [1]);
+        AdminMenus::createMany([
+            ['id'=>1, 'parent_id'=>0, 'name'=>'控制台', 'icon'=>'', 'url'=>'/admin/index', 'rule'=>''],
+            ['id'=>2, 'parent_id'=>0, 'name'=>'权限管理', 'icon'=>'', 'url'=>'', 'rule'=>'ACCESS_MANAGE'],
+            ['id'=>3, 'parent_id'=>2, 'name'=>'角色管理', 'icon'=>'', 'url'=>'/admin/role', 'rule'=>'ROLE_LIST'],
+            ['id'=>4, 'parent_id'=>2, 'name'=>'管理员', 'icon'=>'', 'url'=>'/admin/admin', 'rule'=>'ADMIN_LIST'],
+            ['id'=>5, 'parent_id'=>2, 'name'=>'权限列表', 'icon'=>'', 'url'=>'/admin/rule', 'rule'=>'RULE_LIST'],
+            ['id'=>6, 'parent_id'=>2, 'name'=>'后台菜单', 'icon'=>'', 'url'=>'/admin/menu', 'rule'=>'ADMIN_MENU_LIST'],
+        ]);
     }
 }

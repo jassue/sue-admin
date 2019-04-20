@@ -10,14 +10,14 @@ namespace app\http\middleware;
 
 
 use app\admin\exception\NoAuthForAccessException;
-use app\admin\facade\AuthService;
+use app\admin\facade\AdminRules;
 use app\common\facade\Auth;
 
 class Check
 {
     public function handle($request, \Closure $next, string $auth)
     {
-        if (!AuthService::check(Auth::guard('admin')->user(), $auth)) {
+        if (!AdminRules::checkRuleByAdmin(Auth::guard('admin')->user(), $auth)) {
             if ($request->isAjax()) {
                 throw new NoAuthForAccessException();
             } else {

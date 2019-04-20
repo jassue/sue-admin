@@ -10,11 +10,10 @@
 // +----------------------------------------------------------------------
 use think\facade\Route;
 
-Route::get('/', function () {
-    return redirect('/admin');
-});
 Route::group('admin', function () {
     Route::get('/login', 'Admin/loginPage');
     Route::post('/login', 'Admin/login');
-    Route::get('/', 'Index/index');
+    Route::group('/', function () {
+        Route::get('/', 'Index/index')->middleware('Check:ACCESS_CONTROL');
+    })->middleware('Auth:admin');
 })->prefix('admin/');

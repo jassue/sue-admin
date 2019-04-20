@@ -9,6 +9,7 @@
 namespace app\admin\service;
 
 
+use app\common\model\Admin;
 use app\common\model\AdminRule;
 
 class AdminRules
@@ -45,5 +46,36 @@ class AdminRules
     public function createMany(array $data)
     {
         return (new AdminRule)->saveAll($data, false)->column('id');
+    }
+
+    /**
+     * @param Admin $admin
+     * @param string $auth
+     * @return bool
+     */
+    public function checkRuleByAdmin(Admin $admin, string $auth)
+    {
+        $result = false;
+        $admin->roles->each(function ($role) use ($auth, &$result) {
+            if ($role->id == 1)
+                $result = true;
+            $exists = $role->rules()->where('name', $auth)->find();
+            if ($exists)
+                $result = true;
+        });
+        return $result;
+    }
+
+    /**
+     * @param Admin $admin
+     * @return array
+     */
+    public function getRuleNameArrByAdmin(Admin $admin)
+    {
+        $ruleNameArr = [];
+        foreach ($admin->roles as $role) {
+            $ruleNameArr = array_merge($ruleNameArr, $role->rules->column('name'));
+        }
+        return array_unique($ruleNameArr);
     }
 }
