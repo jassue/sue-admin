@@ -41,4 +41,12 @@ class Admin extends BaseController
         Auth::guard('admin')->login($admin);
         return new SuccessResult();
     }
+
+    /**
+     * @return \think\response\View
+     */
+    public function index()
+    {
+        return view('index');
+    }
 }

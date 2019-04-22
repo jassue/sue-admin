@@ -1,0 +1,14 @@
+version: '3'
+services:
+  sue-admin:
+    image: webdevops/php-nginx:7.2
+    container_name: sue-admin
+    expose:
+    - "80"
+    environment:
+    - VIRTUAL_HOST=sueadmin.io
+    - WEB_DOCUMENT_ROOT=/app/public
+    volumes:
+    - ./:/app
+    - ./location_nginx.conf:/opt/docker/etc/nginx/vhost.common.d/10-location-root.conf
+    network_mode: docker_network

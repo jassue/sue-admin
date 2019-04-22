@@ -10,10 +10,24 @@
 // +----------------------------------------------------------------------
 use think\facade\Route;
 
+Route::get('/', 'Index/index');
+
 Route::group('admin', function () {
     Route::get('/login', 'Admin/loginPage');
     Route::post('/login', 'Admin/login');
     Route::group('/', function () {
-        Route::get('/', 'Index/index')->middleware('Check:ACCESS_CONTROL');
-    })->middleware('Auth:admin');
+        Route::get('/index', 'Index/index');
+        Route::group('/role', function () {
+            Route::get('/', 'Role/index');
+        })->middleware('Check:ROLE_LIST');
+        Route::group('/admin', function () {
+            Route::get('/', 'Admin/index');
+        })->middleware('Check:ADMIN_LIST');
+        Route::group('/rule', function () {
+            Route::get('/', 'Rule/index');
+        })->middleware('Check:RULE_LIST');
+        Route::group('/menu', function () {
+            Route::get('/', 'Menu/index');
+        })->middleware('Check:ADMIN_MENU_LIST');
+    })->middleware(['Auth:admin', 'SetMenu']);
 })->prefix('admin/');

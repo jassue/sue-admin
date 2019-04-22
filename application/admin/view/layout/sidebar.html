@@ -1,19 +1,28 @@
 <aside class="main-sidebar">
     <section class="sidebar">
         <ul class="sidebar-menu" data-widget="tree">
-            <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
-            <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
+            {present name="menuList"}
+            {volist name="menuList" id="menu"}
+            {notempty name="menu['url']"}
+            <li><a href="{$menu['url']}"><i class="fa {$menu['icon']}"></i> <span>{$menu['name']}</span></a></li>
+            {else/}
             <li class="treeview">
-                <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
+                <a href="javascript:;"><i class="fa {$menu['icon']}"></i> <span>{$menu['name']}</span>
                     <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
                 </a>
+                {notempty name="menu['child']"}
                 <ul class="treeview-menu">
-                    <li><a href="#">Link in level 2</a></li>
-                    <li><a href="#">Link in level 2</a></li>
+                    {volist name="menu['child']" id="menu2"}
+                    <li><a href="{$menu2['url']}"><i class="fa {$menu2['icon']}"></i><span> {$menu2['name']}</span></a></li>
+                    {/volist}
                 </ul>
+                {/notempty}
             </li>
+            {/notempty}
+            {/volist}
+            {/present}
         </ul>
     </section>
 </aside>
