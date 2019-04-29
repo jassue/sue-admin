@@ -11,6 +11,7 @@ namespace app\admin\service;
 
 use app\common\enum\BaseStatus;
 use app\common\model\Admin;
+use app\common\model\AdminRoleRelation;
 
 class Admins
 {
@@ -68,5 +69,52 @@ class Admins
     public function checkPassword(Admin $admin, string $password)
     {
         return $admin->checkPassword($password);
+    }
+
+    /**
+     * @param Admin $admin
+     * @param string $password
+     */
+    public function setPassword(Admin $admin, string $password)
+    {
+        $admin->setAttr('password', Admin::makePassword($password));
+        $admin->save();
+    }
+
+    /**
+     * @param array $post
+     */
+    public function edit(array $post)
+    {
+        Admin::update($post);
+    }
+
+    /**
+     * @param Admin $admin
+     * @param array $roleIds
+     * @throws \think\Exception
+     */
+    public function toggleRoles(Admin $admin, array $roleIds)
+    {
+        $admin->roles()->attach($roleIds);
+    }
+
+    /**
+     * @param array $ids
+     */
+    public function delete(array $ids)
+    {
+        $roleRelationIds = AdminRoleRelation::whereIn('admin_id', $ids)->column('id');
+        AdminRoleRelation::destroy($roleRelationIds);
+        Admin::destroy($ids);
+    }
+
+    /**
+     * @param Admin $admin
+     * @param array $roleIds
+     */
+    public function unbindRoles(Admin $admin, array $roleIds)
+    {
+        $admin->roles()->detach($roleIds);
     }
 }

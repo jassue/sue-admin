@@ -14,4 +14,12 @@ class AdminRule extends BaseModel
     protected $hidden = [
         'pivot'
     ];
+
+    /**
+     * @return \think\model\relation\HasMany
+     */
+    public function child()
+    {
+        return $this->hasMany(AdminRule::class, 'parent_id', 'id');
+    }
 }

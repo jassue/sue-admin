@@ -78,4 +78,31 @@ class AdminRules
         }
         return array_unique($ruleNameArr);
     }
+
+    /**
+     * @return array|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function getList()
+    {
+        return AdminRule::with('child.child')->where('parent_id', 1)->select();
+    }
+
+    /**
+     * @param array $post
+     */
+    public function edit(array $post)
+    {
+        AdminRule::update($post);
+    }
+
+    /**
+     * @param array $ids
+     */
+    public function delete(array $ids)
+    {
+        AdminRule::destroy($ids);
+    }
 }
