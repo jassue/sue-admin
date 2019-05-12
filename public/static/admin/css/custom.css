@@ -1,0 +1,30 @@
+/*index page*/
+ul.dropdown-menu {
+    padding: 10px;
+}
+ul.dropdown-menu > li {
+    text-indent: 3px;
+}
+ul.dropdown-menu > li > label {
+    font-weight: normal;
+}
+#search-box label{
+    font-weight: normal;
+}
+ul.pagination {
+    margin: 0px;
+}
+table th, table td {
+    text-align: center;
+}
+/*info page*/
+.control-label.error,.check-container > label {
+    font-weight: normal;
+}
+.control-label.error {
+    font-weight: normal;
+}
+/*modal*/
+.modal > .modal-dialog {
+    width: 350px;
+}

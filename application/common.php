@@ -10,3 +10,9 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+if (!function_exists('is_check')) {
+    function is_check($id, $ids) {
+        if (in_array($id, $ids))
+            return 'checked';
+    }
+}

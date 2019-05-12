@@ -9,6 +9,8 @@
 namespace app\common\model;
 
 
+use app\common\enum\BaseStatus;
+
 class Admin extends BaseUser
 {
     /**
@@ -17,6 +19,15 @@ class Admin extends BaseUser
     public function roles()
     {
         return $this->belongsToMany(AdminRole::class, AdminRoleRelation::class, 'role_id', 'admin_id');
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public function getStatusAttr($value)
+    {
+        return BaseStatus::$statusMap[$value];
     }
 
 }

@@ -12,6 +12,7 @@ namespace app\admin\service;
 use app\common\enum\BaseStatus;
 use app\common\model\Admin;
 use app\common\model\AdminRoleRelation;
+use think\facade\Session;
 
 class Admins
 {
@@ -26,14 +27,17 @@ class Admins
 
     /**
      * @param string $username
+     * @param string $name
      * @param string $password
      * @param string $mobile
      * @return Admin
+     *
      */
-    public function create(string $username, string $password, string $mobile)
+    public function create(string $username, string $name, string $password, string $mobile)
     {
         return Admin::create([
             'username' => $username,
+            'name' => $name,
             'password' => Admin::makePassword($password),
             'mobile_phone' => $mobile,
             'status' => BaseStatus::ENABLE
@@ -82,11 +86,66 @@ class Admins
     }
 
     /**
+     * @param Admin $admin
+     */
+    public function login(Admin $admin)
+    {
+        $admin->last_login_ip = request()->ip();
+        $admin->last_login_time = time();
+        $admin->save();
+        Session::set('admin', $admin);
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkLogin()
+    {
+        return Session::has('admin') ? true : false;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function user()
+    {
+        return Session::get('admin');
+    }
+
+    /**
+     * @param int $length
+     * @param string $username
+     * @param string $name
+     * @return mixed
+     * @throws \think\exception\DbException
+     */
+    public function getPaginateListWithRoles(int $length, string $username, string $name)
+    {
+        $where = [];
+        !empty($username) && $where[] = ['username', 'like', "{$username}%"];
+        !empty($name) && $where[] = ['name', 'like', "{$name}%"];
+        return Admin::with('roles')
+            ->where($where)
+            ->paginate($length,false, ['query' => request()->param()])
+            ->withAttr('roles',
+                function ($values) {
+                    return $values->column('name');
+                }
+            );
+    }
+
+    /**
      * @param array $post
      */
-    public function edit(array $post)
+    public function update(array $post)
     {
-        Admin::update($post);
+        $data['id'] = $post['id'];
+        !empty($post['username']) && $data['username'] = $post['username'];
+        !empty($post['name']) && $data['name'] = $post['name'];
+        !empty($post['mobile_phone']) && $data['mobile_phone'] = $post['mobile'];
+        !empty($post['status']) && $data['status'] = $post['status'];
+        !empty($post['password']) && $data['password'] = Admin::makePassword($post['password']);
+        Admin::update($data);
     }
 
     /**
@@ -96,7 +155,16 @@ class Admins
      */
     public function toggleRoles(Admin $admin, array $roleIds)
     {
-        $admin->roles()->attach($roleIds);
+        $a = $admin->roles()->select()->column('id');
+        $needUnbindIds = [];
+        foreach ($a as $value) {
+            if (!in_array($value, $roleIds))
+                array_push($needUnbindIds, $value);
+            else
+                $roleIds = array_merge(array_diff($roleIds, array($value)));
+        }
+        !empty($needUnbindIds) && $this->unbindRoles($admin, $needUnbindIds);
+        !empty($roleIds) && $admin->roles()->attach($roleIds);
     }
 
     /**
@@ -116,5 +184,16 @@ class Admins
     public function unbindRoles(Admin $admin, array $roleIds)
     {
         $admin->roles()->detach($roleIds);
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function getInfoWithRolesById(int $id)
+    {
+        $admin = $this->getById($id);
+        $admin->roleIds = $admin->roles()->select()->column('id');
+        return $admin;
     }
 }

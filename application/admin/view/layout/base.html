@@ -15,11 +15,11 @@
   <div class="content-wrapper">
     <section class="content-header">
       <h1>
-        Page Header
-        <small>Optional description</small>
+        {block name="pageHeader"}{/block}
+        <small>{block name="description"}{/block}</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-home"></i> 主页</a></li>
+        <li><a href="/admin"><i class="fa fa-home"></i> 主页</a></li>
       </ol>
     </section>
     <section class="content container-fluid">

@@ -3,7 +3,7 @@
 use think\migration\Migrator;
 use think\migration\db\Column;
 
-class CreateAdminRoleRuleRelation extends Migrator
+class CreateAdminRoleRelationTable extends Migrator
 {
     /**
      * Change Method.
@@ -28,19 +28,19 @@ class CreateAdminRoleRuleRelation extends Migrator
      */
     public function up()
     {
-        $this->table('admin_role_rule_relation')
+        $this->table('admin_role_relation')
             ->setId(false)->setPrimaryKey('id')->setEngine('InnoDB')
             ->addColumn('id', 'biginteger', ['identity'=>true, 'signed'=>false])
+            ->addColumn('admin_id', 'biginteger', ['signed'=>false])
             ->addColumn('role_id', 'biginteger', ['signed'=>false])
-            ->addColumn('rule_id', 'biginteger', ['signed'=>false])
             ->addColumn('create_time', 'integer', ['limit'=>10, 'signed'=>false])
             ->addColumn('update_time', 'integer', ['limit'=>10, 'signed'=>false])
-            ->addIndex(['role_id', 'rule_id'])
+            ->addIndex(['admin_id','role_id'])
             ->create();
     }
 
     public function down()
     {
-        $this->dropTable('admin_role_rule_relation');
+        $this->dropTable('admin_role_relation');
     }
 }

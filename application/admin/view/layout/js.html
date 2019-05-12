@@ -1,29 +1,30 @@
 <script src="__COMPONENTS__/jquery/dist/jquery.min.js"></script>
 <script src="__COMPONENTS__/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="__ADMIN__/js/adminlte.min.js"></script>
+<script src="__ADMIN__/js/custom.js"></script>
 <script type="text/javascript">
     let menuJs = {
-        url : location.pathname,
+        url : '',
         activeNavWithShowBreadcrumb : function () {
-            var menu1 = $('ul.sidebar-menu > li > a[href=\''+menuJs.url+'\']')
+            let menu1 = $('ul.sidebar-menu > li > a[href=\''+menuJs.url+'\']')
             if (menu1.length == 1) {
                 menu1.parent().addClass('active')
-                var html = '<li class="active">'+menu1.find('span').text()+'</li>'
             } else {
-                var menu2 = $('ul.sidebar-menu ul > li > a[href=\''+menuJs.url+'\']')
+                let menu2 = $('ul.sidebar-menu ul > li > a[href=\''+menuJs.url+'\']')
                 if (menu2.length == 1) {
                     menu2.parent().addClass('active')
-                    var menu2Name = $.trim(menu2.find('span').text())
+                    let menu2Name = $.trim(menu2.find('span').text())
                     menu1 = menu2.parents('li.treeview')
                     menu1.addClass('active').addClass('menu-open')
-                    var menu1Name = $.trim(menu1.children('a').find('span').text())
-                    var html = '<li>'+menu1Name+'</li><li class="active">'+menu2Name+'</li>'
+                    let menu1Name = $.trim(menu1.children('a').find('span').text())
+                    let html = '<li>'+menu1Name+'</li><li class="active">'+menu2Name+'</li>'
+                    $('ol.breadcrumb').append(html)
                 }
             }
-            $('ol.breadcrumb').append(html)
         },
+        show : function (url) {
+            menuJs.url = url
+            menuJs.activeNavWithShowBreadcrumb()
+        }
     }
-    $(function () {
-        menuJs.activeNavWithShowBreadcrumb()
-    })
 </script>

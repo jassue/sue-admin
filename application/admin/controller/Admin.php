@@ -9,10 +9,11 @@
 namespace app\admin\controller;
 
 
+use app\admin\exception\AdminCantBeOperatedException;
+use app\admin\facade\AdminRoles;
 use app\admin\facade\Admins;
 use app\common\exception\InvalidPasswordException;
 use app\common\response\SuccessResult;
-use app\common\facade\Auth;
 use app\common\validate\AdminValidate;
 use think\Request;
 
@@ -38,15 +39,102 @@ class Admin extends BaseController
         $result = Admins::checkPassword($admin, $request->post('password'));
         if (!$result)
             throw new InvalidPasswordException();
-        Auth::guard('admin')->login($admin);
+        Admins::login($admin);
         return new SuccessResult();
+    }
+
+    /**
+     * @param Request $request
+     * @return \think\response\View
+     */
+    public function index(Request $request)
+    {
+        $keywords = [];
+        $length = $request->get('length', 10);
+        $username = $request->get('username', '');
+        $name = $request->get('name', '');
+        !empty($username) && $keywords['username'] = $username;
+        !empty($name) && $keywords['name'] = $name;
+        $list = Admins::getPaginateListWithRoles($length, $username, $name);
+        return view('index', [
+            'adminList' => $list,
+            'keywords' => $keywords,
+            'length' => $length
+        ]);
     }
 
     /**
      * @return \think\response\View
      */
-    public function index()
+    public function create()
     {
-        return view('index');
+        return view('create', [
+            'roleList' => AdminRoles::getList()
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return SuccessResult
+     */
+    public function save(Request $request)
+    {
+        (new AdminValidate())->goCheck();
+        $admin = Admins::create(
+            $request->post('username'),
+            $request->post('name'),
+            $request->post('password'),
+            $request->post('mobile')
+        );
+        Admins::bindRoles($admin, $request->post('roles'));
+        return new SuccessResult();
+    }
+
+    /**
+     * @param $id
+     * @return \think\response\View
+     * @throws AdminCantBeOperatedException
+     */
+    public function edit($id)
+    {
+        if ($id == 1)
+            throw new AdminCantBeOperatedException();
+        (new AdminValidate())->goCheck('edit');
+        return view('info', [
+            'info' => Admins::getInfoWithRolesById($id),
+            'roleList' => AdminRoles::getList()
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return SuccessResult
+     * @throws AdminCantBeOperatedException
+     */
+    public function update(Request $request)
+    {
+        if ($request->post('id') == 1)
+            throw new AdminCantBeOperatedException();
+        (new AdminValidate())->goCheck('update');
+        $args = $request->post();
+        if (empty($args['password']))
+            unset($args['password']);
+        Admins::update($args);
+        Admins::toggleRoles(Admins::getById($args['id']), $args['roles']);
+        return new SuccessResult();
+    }
+
+    /**
+     * @param Request $request
+     * @return SuccessResult
+     * @throws AdminCantBeOperatedException
+     */
+    public function delete(Request $request)
+    {
+        $ids = $request->post('ids');
+        if (in_array(1, $ids))
+            throw new AdminCantBeOperatedException();
+        Admins::delete($ids);
+        return new SuccessResult();
     }
 }

@@ -51,7 +51,7 @@
 <script src="__COMPONENTS__/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="__PLUGINS__/iCheck/icheck.min.js"></script>
 <script>
-  var adminJs = {
+  let login = {
     initCheck : function () {
       $('input').iCheck({
         checkboxClass: 'icheckbox_square-blue',
@@ -72,8 +72,8 @@
     }
   }
   $(function () {
-    adminJs.initCheck()
-    adminJs.formSubmitMonitor()
+    login.initCheck()
+    login.formSubmitMonitor()
   });
 </script>
 </body>

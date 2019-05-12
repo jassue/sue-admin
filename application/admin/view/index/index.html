@@ -1,5 +1,12 @@
 {extend name="layout/base" /}
-{block name="title"}{$title ?? '首页'}{/block}
+{block name="title"}{$title ?? '控制台'}{/block}
+{block name="pageHeader"}控制台{/block}
+{block name="description"}用于展示当前系统中的统计数据、统计报表及重要实时数据{/block}
 {block name="body"}
-首页
+控制台
+{/block}
+{block name="js"}
+<script type="text/javascript">
+    menuJs.show('/admin')
+</script>
 {/block}

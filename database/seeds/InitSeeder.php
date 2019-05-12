@@ -18,7 +18,7 @@ class InitSeeder extends Seeder
      */
     public function run()
     {
-        $admin = Admins::create('admin', '123456', '');
+        $admin = Admins::create('admin', 'admin', '123456', '');
         $role = AdminRoles::create('超级管理员');
         Admins::bindRoles($admin, [1]);
         AdminRules::createMany([
@@ -44,7 +44,7 @@ class InitSeeder extends Seeder
         ]);
         AdminRoles::allocationRules($role, [1]);
         AdminMenus::createMany([
-            ['id'=>1, 'parent_id'=>0, 'name'=>'控制台', 'icon'=>'fa-dashboard', 'url'=>'/admin/index', 'rule'=>''],
+            ['id'=>1, 'parent_id'=>0, 'name'=>'控制台', 'icon'=>'fa-dashboard', 'url'=>'/admin', 'rule'=>''],
             ['id'=>2, 'parent_id'=>0, 'name'=>'权限管理', 'icon'=>'fa-cube', 'url'=>'', 'rule'=>'ACCESS_MANAGE'],
             ['id'=>3, 'parent_id'=>2, 'name'=>'角色管理', 'icon'=>'fa-circle-o', 'url'=>'/admin/role', 'rule'=>'ROLE_LIST'],
             ['id'=>4, 'parent_id'=>2, 'name'=>'管理员', 'icon'=>'fa-circle-o', 'url'=>'/admin/admin', 'rule'=>'ADMIN_LIST'],

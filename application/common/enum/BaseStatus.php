@@ -13,4 +13,10 @@ class BaseStatus
 {
     const ENABLE = 1;
     const DISABLE = 0;
+
+    public static $statusMap = [
+        self::ENABLE    => '启用',
+        self::DISABLE   => '禁用',
+    ];
+
 }
