@@ -21,7 +21,7 @@ class BaseValidate extends Validate
      * @param bool $batch
      * @return bool
      */
-    public function goCheck(string $scene = '',bool $batch = true)
+    public function goCheck($scene = '', $batch = true)
     {
         $params = Request::param();
         if ($batch)
@@ -52,7 +52,7 @@ class BaseValidate extends Validate
      * @param string $scene
      * @return array
      */
-    public function checkWithGetDataByRule(array $arrays, string $scene = '')
+    public function checkWithGetDataByRule(array $arrays, $scene = '')
     {
         $this->goCheck($scene);
         return $this->getDataByRule($arrays);

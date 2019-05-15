@@ -6,12 +6,12 @@
  * Time: 17:32
  */
 
-namespace app\admin\service;
+namespace app\service\admin;
 
 
 use app\common\model\Admin;
 use app\common\model\AdminMenu;
-use app\admin\facade\AdminRules;
+use app\service\facade\AdminRules;
 
 class AdminMenus
 {

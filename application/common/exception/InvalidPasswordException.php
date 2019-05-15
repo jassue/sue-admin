@@ -11,7 +11,7 @@ namespace app\common\exception;
 
 class InvalidPasswordException extends BusinessException
 {
-    public function __construct($message = null, int $code = ExceptionCode::CODE_INVALID_PASSWORD)
+    public function __construct($message = null, $code = ExceptionCode::CODE_INVALID_PASSWORD)
     {
         parent::__construct($message ?? '密码错误', $code);
     }

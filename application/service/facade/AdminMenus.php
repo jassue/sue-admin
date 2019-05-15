@@ -2,19 +2,19 @@
 /**
  * Created by PhpStorm.
  * User: mattsue15@163.com
- * Date: 2019/4/14
- * Time: 20:34
+ * Date: 2019/4/20
+ * Time: 17:33
  */
 
-namespace app\admin\facade;
+namespace app\service\facade;
 
 
 use think\Facade;
 
-class AdminRules extends Facade
+class AdminMenus extends Facade
 {
     protected static function getFacadeClass()
     {
-        return 'app\admin\service\AdminRules';
+        return 'app\service\admin\AdminMenus';
     }
 }

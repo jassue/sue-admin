@@ -4,9 +4,6 @@
 {block name="description"}一个管理员可以有多个角色组,左侧的菜单根据管理员所拥有的权限进行生成{/block}
 {block name="css"}
 <link rel="stylesheet" href="__PLUGINS__/iCheck/all.css">
-<style type="text/css">
-
-</style>
 {/block}
 {block name="body"}
 <div class="row">
@@ -188,7 +185,7 @@
             $("input.column-select").on('ifUnchecked', function () {
                 $("[data-field='" + $(this).val() + "']").addClass('hide')
             })
-        }
+        },
         showSearchBox : function () {
             if ($('#search-box').hasClass('hide')) {
                 $('#search-box').removeClass('hide')
@@ -238,7 +235,7 @@
                                 msg : res.message
                             })
                         }
-                    }, 'json')
+                    })
                 }
             })
         }

@@ -6,7 +6,7 @@
  * Time: 20:33
  */
 
-namespace app\admin\service;
+namespace app\service\admin;
 
 
 use app\common\enum\BaseStatus;

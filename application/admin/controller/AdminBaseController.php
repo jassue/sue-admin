@@ -9,9 +9,9 @@
 namespace app\admin\controller;
 
 
-use think\Controller;
+use app\common\controller\BaseController;
 
-class BaseController extends Controller
+class AdminBaseController extends BaseController
 {
 
 }

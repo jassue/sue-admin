@@ -9,10 +9,18 @@
 namespace app\common\response;
 
 
+use app\common\exception\ExceptionCode;
+
 class SuccessResult extends RestfulResult
 {
-    public function __construct($data = null, string $message = 'success')
+    /**
+     * SuccessResult constructor.
+     * @param int $code
+     * @param null $data
+     * @param string $message
+     */
+    public function __construct($code = ExceptionCode::CODE_SUCCESS, $data = null, $message = 'success')
     {
-        parent::__construct(0, $data, $message);
+        parent::__construct($code, $data, $message);
     }
 }

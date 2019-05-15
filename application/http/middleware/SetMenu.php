@@ -9,8 +9,8 @@
 namespace app\http\middleware;
 
 
-use app\admin\facade\AdminMenus;
-use app\admin\facade\Admins;
+use app\service\facade\AdminMenus;
+use app\service\facade\Admins;
 use think\facade\View;
 
 class SetMenu

@@ -10,8 +10,8 @@ namespace app\http\middleware;
 
 
 use app\admin\exception\NoAuthForAccessException;
-use app\admin\facade\AdminRules;
-use app\admin\facade\Admins;
+use app\service\facade\AdminRules;
+use app\service\facade\Admins;
 
 class Check
 {

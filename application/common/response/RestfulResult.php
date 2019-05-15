@@ -15,28 +15,47 @@ class RestfulResult
     private $data;
     private $message;
 
-    public function __construct(int $code, $data = null, string $message = '')
+    /**
+     * RestfulResult constructor.
+     * @param int $code
+     * @param null $data
+     * @param string $message
+     */
+    public function __construct(int $code, $data = null, $message = '')
     {
         $this->code = $code;
         $this->data = $data;
         $this->message = $message;
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function __get($name)
     {
         return $this->name;
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
         return ['code' => $this->code, 'data' => $this->data, 'message' => $this->message];
     }
 
+    /**
+     * @return false|string
+     */
     public function toJson()
     {
         return json_encode($this->toArray());
     }
 
+    /**
+     * @return false|string
+     */
     public function __toString()
     {
         return $this->toJson();

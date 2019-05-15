@@ -9,7 +9,7 @@
 namespace app\admin\controller;
 
 
-class Index extends BaseController
+class Index extends AdminBaseController
 {
     /**
      * @return \think\response\View

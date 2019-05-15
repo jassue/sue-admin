@@ -9,6 +9,7 @@
 namespace app\common\exception;
 
 
+use app\common\response\RestfulResult;
 use think\exception\Handle;
 use Exception;
 use think\exception\ValidateException;
@@ -41,11 +42,7 @@ class ExceptionHandle extends Handle
         Log::close();
         if (Request::isGet())
             return redirect(Request::server('HTTP_REFERER'));
-        return json([
-            'code'  => ExceptionCode::CODE_VALIDATE_ERROR,
-            'data'  => null,
-            'message'   => $e->getError()
-        ]);
+        return json((new RestfulResult(ExceptionCode::CODE_VALIDATE_ERROR, null, $e->getError()))->toArray());
     }
 
     /**
@@ -57,10 +54,6 @@ class ExceptionHandle extends Handle
         Log::close();
         if (Request::isGet())
             return redirect(Request::server('HTTP_REFERER'));
-        return json([
-            'code'  => $e->getCode(),
-            'data'  => null,
-            'message'   => $e->getMessage()
-        ]);
+        return json((new RestfulResult($e->getCode(), null, $e->getMessage()))->toArray());
     }
 }

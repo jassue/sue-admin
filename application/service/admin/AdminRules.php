@@ -6,7 +6,7 @@
  * Time: 21:09
  */
 
-namespace app\admin\service;
+namespace app\service\admin;
 
 
 use app\common\model\Admin;

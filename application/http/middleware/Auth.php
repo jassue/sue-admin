@@ -9,7 +9,7 @@
 namespace app\http\middleware;
 
 
-use app\admin\facade\Admins;
+use app\service\facade\Admins;
 use app\common\exception\NotLoginInException;
 
 class Auth

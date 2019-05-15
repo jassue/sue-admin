@@ -14,7 +14,7 @@ use app\common\exception\ExceptionCode;
 
 class AdminCantBeOperatedException extends BusinessException
 {
-    public function __construct($message = null, int $code = ExceptionCode::CODE_SYSTEM_ADMIN_CANNOT_BE_OPERATED)
+    public function __construct($message = null, $code = ExceptionCode::CODE_SYSTEM_ADMIN_CANNOT_BE_OPERATED)
     {
         parent::__construct($message ?? '系统内置管理员不能被操作', $code);
     }

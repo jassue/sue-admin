@@ -10,14 +10,14 @@ namespace app\admin\controller;
 
 
 use app\admin\exception\AdminCantBeOperatedException;
-use app\admin\facade\AdminRoles;
-use app\admin\facade\Admins;
+use app\service\facade\AdminRoles;
+use app\service\facade\Admins;
 use app\common\exception\InvalidPasswordException;
 use app\common\response\SuccessResult;
 use app\common\validate\AdminValidate;
 use think\Request;
 
-class Admin extends BaseController
+class Admin extends AdminBaseController
 {
     /**
      * @return \think\response\View
@@ -29,7 +29,7 @@ class Admin extends BaseController
 
     /**
      * @param Request $request
-     * @return SuccessResult
+     * @return \think\response\Json
      * @throws InvalidPasswordException
      */
     public function login(Request $request)
@@ -40,7 +40,7 @@ class Admin extends BaseController
         if (!$result)
             throw new InvalidPasswordException();
         Admins::login($admin);
-        return new SuccessResult();
+        return $this->json(new SuccessResult());
     }
 
     /**
@@ -75,7 +75,7 @@ class Admin extends BaseController
 
     /**
      * @param Request $request
-     * @return SuccessResult
+     * @return \think\response\Json
      */
     public function save(Request $request)
     {
@@ -87,7 +87,7 @@ class Admin extends BaseController
             $request->post('mobile')
         );
         Admins::bindRoles($admin, $request->post('roles'));
-        return new SuccessResult();
+        return $this->json(new SuccessResult());
     }
 
     /**
@@ -108,7 +108,7 @@ class Admin extends BaseController
 
     /**
      * @param Request $request
-     * @return SuccessResult
+     * @return \think\response\Json
      * @throws AdminCantBeOperatedException
      */
     public function update(Request $request)
@@ -121,12 +121,12 @@ class Admin extends BaseController
             unset($args['password']);
         Admins::update($args);
         Admins::toggleRoles(Admins::getById($args['id']), $args['roles']);
-        return new SuccessResult();
+        return $this->json(new SuccessResult());
     }
 
     /**
      * @param Request $request
-     * @return SuccessResult
+     * @return \think\response\Json
      * @throws AdminCantBeOperatedException
      */
     public function delete(Request $request)
@@ -135,6 +135,6 @@ class Admin extends BaseController
         if (in_array(1, $ids))
             throw new AdminCantBeOperatedException();
         Admins::delete($ids);
-        return new SuccessResult();
+        return $this->json(new SuccessResult());
     }
 }

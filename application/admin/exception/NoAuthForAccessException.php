@@ -14,7 +14,7 @@ use app\common\exception\ExceptionCode;
 
 class NoAuthForAccessException extends BusinessException
 {
-    public function __construct($message = null, int $code = ExceptionCode::CODE_NO_AUTH_FOR_ACCESS)
+    public function __construct($message = null, $code = ExceptionCode::CODE_NO_AUTH_FOR_ACCESS)
     {
         parent::__construct($message ?? '您无权访问该功能', $code);
     }
