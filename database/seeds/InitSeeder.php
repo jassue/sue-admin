@@ -1,10 +1,10 @@
 <?php
 
 use think\migration\Seeder;
-use \app\admin\facade\Admins;
-use \app\admin\facade\AdminRoles;
-use \app\admin\facade\AdminRules;
-use \app\admin\facade\AdminMenus;
+use \app\service\facade\Admins;
+use \app\service\facade\AdminRoles;
+use \app\service\facade\AdminRules;
+use \app\service\facade\AdminMenus;
 
 class InitSeeder extends Seeder
 {
@@ -20,9 +20,9 @@ class InitSeeder extends Seeder
     {
         $admin = Admins::create('admin', 'admin', '123456', '');
         $role = AdminRoles::create('超级管理员');
-        Admins::bindRoles($admin, [1]);
+        Admins::bindRoles($admin, [$role->id]);
         AdminRules::createMany([
-            ['id'=>1, 'parent_id'=>0, 'title'=>'超级管理员', 'name'=>'ALL'],
+            ['id'=>1, 'parent_id'=>0, 'title'=>'所有权限', 'name'=>'ALL'],
             ['id'=>2, 'parent_id'=>1, 'title'=>'权限管理', 'name'=>'ACCESS_MANAGE'],
             ['id'=>3, 'parent_id'=>2, 'title'=>'后台菜单', 'name'=>'ADMIN_MENU_LIST'],
             ['id'=>4, 'parent_id'=>3, 'title'=>'添加菜单', 'name'=>'CREATE_ADMIN_MENU'],

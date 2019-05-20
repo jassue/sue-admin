@@ -140,11 +140,11 @@ class Admins
     public function update(array $post)
     {
         $data['id'] = $post['id'];
-        !empty($post['username']) && $data['username'] = $post['username'];
-        !empty($post['name']) && $data['name'] = $post['name'];
-        !empty($post['mobile_phone']) && $data['mobile_phone'] = $post['mobile'];
-        !empty($post['status']) && $data['status'] = $post['status'];
-        !empty($post['password']) && $data['password'] = Admin::makePassword($post['password']);
+        isset($post['username']) && $data['username'] = $post['username'];
+        isset($post['name']) && $data['name'] = $post['name'];
+        isset($post['mobile_phone']) && $data['mobile_phone'] = $post['mobile'];
+        isset($post['status']) && $data['status'] = $post['status'];
+        isset($post['password']) && $data['password'] = Admin::makePassword($post['password']);
         Admin::update($data);
     }
 
