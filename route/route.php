@@ -24,6 +24,7 @@ Route::group('admin', function () {
         })->middleware('Check:ROLE_LIST');
         Route::group('/admin', function () {
             Route::get('/', 'Admin/index');
+            Route::post('/list', 'Admin/list');
             Route::get('/create', 'Admin/create');
             Route::post('/save', 'Admin/save');
             Route::get('/edit/:id', 'Admin/edit');

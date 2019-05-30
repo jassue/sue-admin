@@ -11,10 +11,6 @@ namespace app\common\model;
 
 class AdminRule extends BaseModel
 {
-    protected $hidden = [
-        'pivot'
-    ];
-
     /**
      * @return \think\model\relation\HasMany
      */

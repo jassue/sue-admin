@@ -30,4 +30,12 @@ class Admin extends BaseUser
         return BaseStatus::$statusMap[$value];
     }
 
+    /**
+     * @param $value
+     * @return false|string
+     */
+    public function getLastLoginTimeAttr($value)
+    {
+        return $value != 0 ? date('Y-m-d H:i:s', $value) : '';
+    }
 }

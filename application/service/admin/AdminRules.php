@@ -10,6 +10,7 @@ namespace app\service\admin;
 
 
 use app\common\model\Admin;
+use app\common\model\AdminRole;
 use app\common\model\AdminRule;
 
 class AdminRules
@@ -33,8 +34,8 @@ class AdminRules
     {
         return AdminRule::create([
             'parent_id' => $parentId,
-            'title' => $title,
-            'name' => $name
+            'title'     => $title,
+            'name'      => $name
         ]);
     }
 
@@ -70,13 +71,13 @@ class AdminRules
      * @param Admin $admin
      * @return array
      */
-    public function getRuleNameArrByAdmin(Admin $admin)
+    public function getRuleIdsByAdmin(Admin $admin)
     {
-        $ruleNameArr = [];
+        $ruleIds = [];
         foreach ($admin->roles as $role) {
-            $ruleNameArr = array_merge($ruleNameArr, $role->rules->column('name'));
+            $ruleIds = array_merge($ruleIds, $role->rules->column('id'));
         }
-        return array_unique($ruleNameArr);
+        return array_unique($ruleIds);
     }
 
     /**

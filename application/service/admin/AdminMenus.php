@@ -26,20 +26,20 @@ class AdminMenus
 
     /**
      * @param int $parentId
+     * @param int $ruleId
      * @param string $name
      * @param string $icon
      * @param string $url
-     * @param string $rule
      * @return AdminMenu
      */
-    public function create(int $parentId, string $name, string $icon = '', string $url = '', string $rule = '')
+    public function create(int $parentId, int $ruleId, string $name, $icon = '', $url = '')
     {
         return AdminMenu::create([
-           'parent_id' => $parentId,
-            'name' => $name,
-            'icon' => $icon,
-            'url' => $url,
-            'rule' => $rule,
+            'parent_id' => $parentId,
+            'rule_id'   => $ruleId,
+            'name'      => $name,
+            'icon'      => $icon,
+            'url'       => $url,
         ]);
     }
 
@@ -62,24 +62,24 @@ class AdminMenus
      */
     public function getListByAdmin(Admin $admin)
     {
-        $ruleNameArr = AdminRules::getRuleNameArrByAdmin($admin);
-        $isSuperAdmin = in_array('ALL', $ruleNameArr) ?? false;
+        $ruleIds = AdminRules::getRuleIdsByAdmin($admin);
+        $isSuperAdmin = in_array(1, $ruleIds) ?? false;
         $query = AdminMenu::where('parent_id', 0);
         if (!$isSuperAdmin) {
             $query->where(
-                function ($query) use ($ruleNameArr) {
+                function ($query) use ($ruleIds) {
                     $query
-                        ->whereIn('rule', $ruleNameArr)
-                        ->whereOr('rule', '');
+                        ->whereIn('rule_id', $ruleIds)
+                        ->whereOr('rule_id', 0);
                 }
             );
         }
         $menuList = $query->select()->each(
-            function ($menu) use ($ruleNameArr, $isSuperAdmin) {
+            function ($menu) use ($ruleIds, $isSuperAdmin) {
                 if ($isSuperAdmin)
                     $menu->child;
                 else
-                    $menu->child = $menu->child()->whereIn('rule', $ruleNameArr)->select();
+                    $menu->child = $menu->child()->whereIn('rule', $ruleIds)->select();
                 return $menu;
             }
         );

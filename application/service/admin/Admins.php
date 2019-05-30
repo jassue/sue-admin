@@ -12,6 +12,7 @@ namespace app\service\admin;
 use app\common\enum\BaseStatus;
 use app\common\model\Admin;
 use app\common\model\AdminRoleRelation;
+use think\facade\Log;
 use think\facade\Session;
 
 class Admins
@@ -36,11 +37,11 @@ class Admins
     public function create(string $username, string $name, string $password, string $mobile)
     {
         return Admin::create([
-            'username' => $username,
-            'name' => $name,
-            'password' => Admin::makePassword($password),
+            'username'     => $username,
+            'name'         => $name,
+            'password'     => Admin::makePassword($password),
             'mobile_phone' => $mobile,
-            'status' => BaseStatus::ENABLE
+            'status'       => BaseStatus::ENABLE
         ]);
     }
 
@@ -113,23 +114,25 @@ class Admins
     }
 
     /**
-     * @param int $length
+     * @param int $page
+     * @param int $size
      * @param string $username
      * @param string $name
-     * @return mixed
+     * @return \think\Paginator
      * @throws \think\exception\DbException
      */
-    public function getPaginateListWithRoles(int $length, string $username, string $name)
+    public function getPaginateList(int $page, int $size, string $username, string $name)
     {
         $where = [];
         !empty($username) && $where[] = ['username', 'like', "{$username}%"];
         !empty($name) && $where[] = ['name', 'like', "{$name}%"];
         return Admin::with('roles')
             ->where($where)
-            ->paginate($length,false, ['query' => request()->param()])
-            ->withAttr('roles',
-                function ($values) {
-                    return $values->column('name');
+            ->paginate($size,false, ['page' => $page])
+            ->each(
+                function ($item) {
+                    $item->roles_name = $item->roles->column('name');
+                    unset($item->roles);
                 }
             );
     }
@@ -155,13 +158,13 @@ class Admins
      */
     public function toggleRoles(Admin $admin, array $roleIds)
     {
-        $a = $admin->roles()->select()->column('id');
+        $curRoleIds = $admin->roles()->select()->column('id');
         $needUnbindIds = [];
-        foreach ($a as $value) {
-            if (!in_array($value, $roleIds))
-                array_push($needUnbindIds, $value);
+        foreach ($curRoleIds as $roleId) {
+            if (!in_array($roleId, $roleIds))
+                array_push($needUnbindIds, $roleId);
             else
-                $roleIds = array_merge(array_diff($roleIds, array($value)));
+                $roleIds = array_merge(array_diff($roleIds, array($roleId)));
         }
         !empty($needUnbindIds) && $this->unbindRoles($admin, $needUnbindIds);
         !empty($roleIds) && $admin->roles()->attach($roleIds);

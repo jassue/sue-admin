@@ -22,4 +22,12 @@ class AdminMenu extends BaseModel
     {
         return $this->hasMany(AdminMenu::class, 'parent_id', 'id');
     }
+
+    /**
+     * @return \think\model\relation\BelongsTo
+     */
+    public function rule()
+    {
+        return $this->belongsTo(AdminRule::class, 'rule_id', 'id');
+    }
 }

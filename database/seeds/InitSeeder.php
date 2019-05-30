@@ -44,12 +44,12 @@ class InitSeeder extends Seeder
         ]);
         AdminRoles::allocationRules($role, [1]);
         AdminMenus::createMany([
-            ['id'=>1, 'parent_id'=>0, 'name'=>'控制台', 'icon'=>'fa-dashboard', 'url'=>'/admin', 'rule'=>''],
-            ['id'=>2, 'parent_id'=>0, 'name'=>'权限管理', 'icon'=>'fa-cube', 'url'=>'', 'rule'=>'ACCESS_MANAGE'],
-            ['id'=>3, 'parent_id'=>2, 'name'=>'角色管理', 'icon'=>'fa-circle-o', 'url'=>'/admin/role', 'rule'=>'ROLE_LIST'],
-            ['id'=>4, 'parent_id'=>2, 'name'=>'管理员', 'icon'=>'fa-circle-o', 'url'=>'/admin/admin', 'rule'=>'ADMIN_LIST'],
-            ['id'=>5, 'parent_id'=>2, 'name'=>'权限列表', 'icon'=>'fa-circle-o', 'url'=>'/admin/rule', 'rule'=>'RULE_LIST'],
-            ['id'=>6, 'parent_id'=>2, 'name'=>'后台菜单', 'icon'=>'fa-circle-o', 'url'=>'/admin/menu', 'rule'=>'ADMIN_MENU_LIST'],
+            ['id'=>1, 'parent_id'=>0, 'rule_id'=>0, 'name'=>'控制台', 'icon'=>'fa-dashboard', 'url'=>'/admin'],
+            ['id'=>2, 'parent_id'=>0, 'rule_id'=>2, 'name'=>'权限管理', 'icon'=>'fa-cube', 'url'=>''],
+            ['id'=>3, 'parent_id'=>2, 'rule_id'=>7, 'name'=>'角色管理', 'icon'=>'fa-circle-o', 'url'=>'/admin/role'],
+            ['id'=>4, 'parent_id'=>2, 'rule_id'=>12, 'name'=>'管理员', 'icon'=>'fa-circle-o', 'url'=>'/admin/admin'],
+            ['id'=>5, 'parent_id'=>2, 'rule_id'=>16, 'name'=>'权限列表', 'icon'=>'fa-circle-o', 'url'=>'/admin/rule'],
+            ['id'=>6, 'parent_id'=>2, 'rule_id'=>3, 'name'=>'后台菜单', 'icon'=>'fa-circle-o', 'url'=>'/admin/menu'],
         ]);
     }
 }

@@ -15,12 +15,11 @@ class SuccessResult extends RestfulResult
 {
     /**
      * SuccessResult constructor.
-     * @param int $code
      * @param null $data
      * @param string $message
      */
-    public function __construct($code = ExceptionCode::CODE_SUCCESS, $data = null, $message = 'success')
+    public function __construct($data = null, $message = 'success')
     {
-        parent::__construct($code, $data, $message);
+        parent::__construct(ExceptionCode::CODE_SUCCESS, $data, $message);
     }
 }

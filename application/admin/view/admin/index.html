@@ -3,6 +3,7 @@
 {block name="pageHeader"}管理员{/block}
 {block name="description"}一个管理员可以有多个角色组,左侧的菜单根据管理员所拥有的权限进行生成{/block}
 {block name="css"}
+<link rel="stylesheet" href="__COMPONENTS__/datatables.net-bs/css/dataTables.bootstrap.min.css">
 <link rel="stylesheet" href="__PLUGINS__/iCheck/all.css">
 {/block}
 {block name="body"}
@@ -19,43 +20,39 @@
                     <button type="button" disabled onclick="admin.delete(check.getSelectAll())" class="btn btn-sm btn-danger delete-all"><i class="fa fa-trash-o"></i> 删除</button>
                     <button type="button" class="btn btn-sm dropdown-toggle bg-light-blue-active" data-toggle="dropdown"><i class="fa fa-table"></i>&nbsp;&nbsp;<span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu">
-                        <li><label><input checked type="checkbox" value="0" class="minimal column-select">&nbsp;&nbsp;&nbsp;ID</label></li>
-                        <li><label><input checked type="checkbox" value="1" class="minimal column-select">&nbsp;&nbsp;&nbsp;用户名</label></li>
-                        <li><label><input checked type="checkbox" value="2" class="minimal column-select">&nbsp;&nbsp;&nbsp;昵称</label></li>
-                        <li><label><input checked type="checkbox" value="3" class="minimal column-select">&nbsp;&nbsp;&nbsp;角色</label></li>
-                        <li><label><input checked type="checkbox" value="4" class="minimal column-select">&nbsp;&nbsp;&nbsp;手机号</label></li>
-                        <li><label><input checked type="checkbox" value="5" class="minimal column-select">&nbsp;&nbsp;&nbsp;状态</label></li>
-                        <li><label><input checked type="checkbox" value="6" class="minimal column-select">&nbsp;&nbsp;&nbsp;最后登录IP</label></li>
-                        <li><label><input checked type="checkbox" value="7" class="minimal column-select">&nbsp;&nbsp;&nbsp;最后登录时间</label></li>
-                        <li><label><input checked type="checkbox" value="8" class="minimal column-select">&nbsp;&nbsp;&nbsp;创建时间</label></li>
+                        <li><label><input checked type="checkbox" value="1" class="minimal column-select">&nbsp;&nbsp;&nbsp;ID</label></li>
+                        <li><label><input checked type="checkbox" value="2" class="minimal column-select">&nbsp;&nbsp;&nbsp;用户名</label></li>
+                        <li><label><input checked type="checkbox" value="3" class="minimal column-select">&nbsp;&nbsp;&nbsp;昵称</label></li>
+                        <li><label><input checked type="checkbox" value="4" class="minimal column-select">&nbsp;&nbsp;&nbsp;角色</label></li>
+                        <li><label><input checked type="checkbox" value="5" class="minimal column-select">&nbsp;&nbsp;&nbsp;手机号</label></li>
+                        <li><label><input checked type="checkbox" value="6" class="minimal column-select">&nbsp;&nbsp;&nbsp;状态</label></li>
+                        <li><label><input checked type="checkbox" value="7" class="minimal column-select">&nbsp;&nbsp;&nbsp;最后登录IP</label></li>
+                        <li><label><input checked type="checkbox" value="8" class="minimal column-select">&nbsp;&nbsp;&nbsp;最后登录时间</label></li>
+                        <li><label><input checked type="checkbox" value="9" class="minimal column-select">&nbsp;&nbsp;&nbsp;创建时间</label></li>
                     </ul>
                 </div>
             </div>
-            <div class="box-header {empty name="keywords"}hide{/empty}" id="search-box">
+            <div class="box-header hide" id="search-box">
                 <form action="" class="form-horizontal" method="get">
                     <div class="box-body">
-                        <div class="form-inline">
+                        <div class="form-group">
                             <label class="control-label col-sm-1">用户名</label>
                             <div class="col-sm-2">
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-addon"><i class="fa fa-pencil"></i></div>
-                                    <input name="username" type="text" class="form-control" value="{$keywords['username'] ?? ''}">
+                                    <input id="username" type="text" class="form-control">
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-inline">
                             <label class="control-label col-sm-1">昵称</label>
                             <div class="col-sm-2">
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-addon"><i class="fa fa-pencil"></i></div>
-                                    <input name="name" type="text" class="form-control" value="{$keywords['name'] ?? ''}">
+                                    <input id="name" type="text" class="form-control">
                                 </div>
                             </div>
-                        </div>
-                        <input name="length" type="hidden" value="10">
-                        <div class="form-inline">
-                            <div class="col-sm-1 text-center">
+                            <div class="col-sm-2 text-center">
                                 <button type="button" onclick="admin.search()" class="btn btn-sm btn-info"><i class="fa fa-search"></i> 搜索</button>
+                                <button type="reset" class="btn btn-sm btn-default"><i class="fa fa-refresh"></i> 重置</button>
                             </div>
                         </div>
                     </div>
@@ -68,74 +65,21 @@
                         <th>
                             <input id="select-all" type="checkbox" class="minimal">
                         </th>
-                        <th data-field="0">ID</th>
-                        <th data-field="1">用户名</th>
-                        <th data-field="2">昵称</th>
-                        <th data-field="3">角色</th>
-                        <th data-field="4">手机号</th>
-                        <th data-field="5">状态</th>
-                        <th data-field="6">最后登录IP</th>
-                        <th data-field="7">最后登录时间</th>
-                        <th data-field="8">创建时间</th>
-                        <th data-field="">操作</th>
+                        <th>ID</th>
+                        <th>用户名</th>
+                        <th>昵称</th>
+                        <th>角色</th>
+                        <th>手机号</th>
+                        <th>状态</th>
+                        <th>最后登录IP</th>
+                        <th>最后登录时间</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {volist name="adminList" id="admin"}
-                    <tr>
-                        <td>
-                            {neq name="admin->id" value="1"}
-                            <input name="rowId[]" type="checkbox" class="minimal" value="{$admin->id}">
-                            {/neq}
-                        </td>
-                        <td data-field="0">{$admin->id}</td>
-                        <td data-field="1">{$admin->username}</td>
-                        <td data-field="2">{$admin->name}</td>
-                        <td data-field="3">{foreach name="$admin->roles" item="role"}
-                            <span class="label label-info">{$role}</span>
-                            {/foreach}
-                        </td>
-                        <td data-field="4">{$admin->mobile_phone}</td>
-                        <td data-field="5">
-                            {eq name="$admin->status" value="启用"}
-                            <span class="label label-success">{$admin->status}</span>
-                            {else}
-                            <span class="label label-danger">{$admin->status}</span>
-                            {/eq}
-                        </td>
-                        <td data-field="6">{$admin->last_login_ip}</td>
-                        <td data-field="7">
-                            {neq name="$admin->last_login_time" value="0"}
-                            {$admin->last_login_time|date='Y-m-d H:i:s'}
-                            {/neq}
-                        </td>
-                        <td data-field="8">{$admin->create_time}</td>
-                        <td>
-                            {neq name="admin->id" value="1"}
-                            <a href="/admin/admin/edit/{$admin->id}" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i></a>
-                            <button onclick="admin.delete({$admin->id})" type="button" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i></button>
-                            {/neq}
-                        </td>
-                    </tr>
-                    {/volist}
                     </tbody>
                 </table>
-            </div>
-            <div class="box-footer clearfix">
-                <div class="pull-right">
-                    {$adminList->render()|raw}
-                </div>
-                <div class="pull-left">
-                    <select onchange="admin.selectLength($(this).val())" class="form-control input-sm" id="lengthSelect">
-                        <option value="10" {eq name="length" value="10"}selected{/eq}>10</option>
-                        <option value="20" {eq name="length" value="20"}selected{/eq}>20</option>
-                        <option value="50" {eq name="length" value="50"}selected{/eq}>50</option>
-                        <option value="100" {eq name="length" value="100"}selected{/eq}>100</option>
-                    </select>
-                </div>
-                <div class="pull-left">
-                    <small style="line-height: 30px">&nbsp;项</small>
-                </div>
             </div>
         </div>
     </div>
@@ -143,77 +87,128 @@
 {/block}
 {block name="js"}
 <script src="__PLUGINS__/iCheck/icheck.min.js"></script>
+<script src="__COMPONENTS__/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="__COMPONENTS__/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript">
     menuJs.show('/admin/admin')
     let check = {
-        init : function () {
+        init: function () {
             $('input[type="checkbox"].minimal').iCheck({
                 checkboxClass: 'icheckbox_minimal-blue'
             })
             $('#select-all').on('ifChecked', function () {
-                $("input[name='rowId[]']").iCheck('check')
+                $("input[name='rowId']").iCheck('check')
             })
             $('#select-all').on('ifUnchecked', function () {
-                $("input[name='rowId[]']").iCheck('uncheck')
+                $("input[name='rowId']").iCheck('uncheck')
             })
-            $("table input[name='rowId[]']").on('ifChanged', function () {
-                if (check.getSelectAll().length == 0) {
+            $("table input[name='rowId']").on('ifChanged', function () {
+                if (check.getSelectIds().length == 0) {
                     $('.delete-all').attr('disabled', true)
                 } else {
                     $('.delete-all').attr('disabled', false)
                 }
             })
         },
-        getSelectAll : function () {
+        getSelectIds: function () {
             let ids = [];
-            $("table input:checked[name='rowId[]']").each(function () {
+            $("table input:checked[name='rowId']").each(function () {
                 ids.push(parseInt($(this).val()));
             });
             return ids;
         }
     }
     let admin = {
-        keywordsJsonStr : '{:json_encode($keywords)}',
-        initTable : function () {
-            check.init()
-            admin.selectColumnListener()
+        dataTable: null,
+        tableOptions: {
+            "searching": false,
+            "ordering": false,
+            "serverSide": true,
+            "ajax": {
+                "type": "post",
+                "url": "/admin/admin/list",
+                "data": function (data) {
+                    data.page = parseInt(data.start/data.length) + 1
+                    data.username = $('#username').val()
+                    data.name = $('#name').val()
+                },
+                "dataSrc": function (result) {
+                    if (result.code != 0) {
+                        $.modal.alert({
+                            msg: result.message
+                        })
+                        result.draw = result.data.draw
+                        result.recordsTotal = 0
+                        result.recordsFiltered = 0
+                        result.data.data = {}
+                    } else {
+                        result.draw = result.data.draw
+                        result.recordsTotal = result.data.count
+                        result.recordsFiltered = result.data.count
+                    }
+                    return result.data.data
+                },
+            },
+            "columns": [
+                {
+                    "data": "id",
+                    "render": function (id) {
+                        return '<input name="rowId" type="checkbox" class="minimal" value="'+id+'">'
+                    }
+                },
+                {"data": "id"},
+                {"data": "username"},
+                {"data": "name"},
+                {
+                    "data": "roles_name",
+                    "render": function (roles_name) {
+                        var html = ''
+                        for (var i = 0; i<roles_name.length; i++) {
+                            html += '<span class="label label-info">'+roles_name[i]+'</span> '
+                        }
+                        return html
+                    }
+                },
+                {"data": "mobile_phone"},
+                {"data": "status"},
+                {"data": "last_login_ip"},
+                {"data": "last_login_time"},
+                {"data": "create_time"},
+                {
+                    "data": "id",
+                    "render": function (id) {
+                        return '<a href="/admin/admin/edit/'+id+'" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i></a>\n' +
+                        '<button onclick="admin.delete('+id+')" type="button" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i></button>\n'
+                    }
+                },
+            ],
+            "language": {
+                "url": "__ADMIN__/config/dataTables.zh_CN.json"
+            }
         },
-        selectColumnListener : function () {
+        initTable: function (id) {
+            admin.dataTable = $("#" + id).DataTable(admin.tableOptions)
+            admin.dataTable.on('draw', function () {
+                check.init()
+            } );
             $("input.column-select").on('ifChecked', function () {
-                $("[data-field='" + $(this).val() + "']").removeClass('hide')
+                admin.dataTable.column($(this).val()).visible(true)
             })
             $("input.column-select").on('ifUnchecked', function () {
-                $("[data-field='" + $(this).val() + "']").addClass('hide')
+                admin.dataTable.column($(this).val()).visible(false)
             })
         },
-        showSearchBox : function () {
+        showSearchBox: function () {
             if ($('#search-box').hasClass('hide')) {
                 $('#search-box').removeClass('hide')
             } else {
                 $('#search-box').addClass('hide')
             }
         },
-        selectLength : function (length) {
-            let keywordJsonObj = JSON.parse(admin.keywordsJsonStr)
-            if (keywordJsonObj.length == 0) {
-                window.location.href = location.pathname + '?length=' + length
-            } else {
-                let params = ''
-                for(let key in keywordJsonObj) {
-                    if (params == '') {
-                        params += '?' + key + '=' + keywordJsonObj[key]
-                    } else {
-                        params += '&' + key + '=' + keywordJsonObj[key]
-                    }
-                }
-                window.location.href = location.pathname + params + '&length=' + length
-            }
+        search: function () {
+            admin.dataTable.ajax.reload()
         },
-        search : function () {
-            $("input[name='length']").val($('#lengthSelect').val())
-            $('form').submit()
-        },
-        delete : function (id) {
+        delete: function (id) {
             if (id.length == 0) {
                 $.modal.alert('您还未未选中任何数据')
                 return false
@@ -225,14 +220,14 @@
                 ids.push(id)
             }
             $.modal.confirm({
-                msg : '确定删除数据吗？',
-                yes : function () {
-                    $.post("/admin/admin/delete", {ids : ids}, function (res) {
+                msg: '确定删除数据吗？',
+                yes: function () {
+                    $.post("/admin/admin/delete", {ids: ids}, function (res) {
                         if (res.code == 0) {
                             window.location.reload()
                         } else {
                             $.modal.alert({
-                                msg : res.message
+                                msg: res.message
                             })
                         }
                     })
@@ -241,7 +236,7 @@
         }
     }
     $(function () {
-        admin.initTable()
+        admin.initTable('table')
     })
 </script>
 {/block}

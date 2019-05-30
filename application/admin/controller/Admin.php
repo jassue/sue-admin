@@ -44,23 +44,31 @@ class Admin extends AdminBaseController
     }
 
     /**
-     * @param Request $request
      * @return \think\response\View
      */
-    public function index(Request $request)
+    public function index()
     {
-        $keywords = [];
-        $length = $request->get('length', 10);
-        $username = $request->get('username', '');
-        $name = $request->get('name', '');
-        !empty($username) && $keywords['username'] = $username;
-        !empty($name) && $keywords['name'] = $name;
-        $list = Admins::getPaginateListWithRoles($length, $username, $name);
         return view('index', [
-            'adminList' => $list,
-            'keywords' => $keywords,
-            'length' => $length
+            'adminList' => []
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return \think\response\Json
+     */
+    public function list(Request $request)
+    {
+        $paginator = Admins::getPaginateList(
+            $request->post('page', 1),
+            $request->post('length', 10),
+            $request->post('username'),
+            $request->post('name')
+        );
+        $data['draw'] = (int)$request->post('draw');
+        $data['count'] = $paginator->total();
+        $data['data'] = $paginator->items();
+        return $this->json(new SuccessResult($data));
     }
 
     /**

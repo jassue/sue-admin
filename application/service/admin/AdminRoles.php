@@ -31,7 +31,7 @@ class AdminRoles
     public function create(string $name)
     {
         return AdminRole::create([
-            'name' => $name,
+            'name'   => $name,
             'status' => BaseStatus::ENABLE
         ]);
     }
@@ -43,6 +43,14 @@ class AdminRoles
     public function allocationRules(AdminRole $adminRole, array $ruleIds)
     {
         $adminRole->rules()->saveAll($ruleIds);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getList()
+    {
+        return AdminRole::all();
     }
 
     /**
