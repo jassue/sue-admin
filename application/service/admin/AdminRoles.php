@@ -32,7 +32,6 @@ class AdminRoles
     {
         return AdminRole::create([
             'name'   => $name,
-            'status' => BaseStatus::ENABLE
         ]);
     }
 

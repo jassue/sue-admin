@@ -38,4 +38,22 @@ class Admin extends BaseUser
     {
         return $value != 0 ? date('Y-m-d H:i:s', $value) : '';
     }
+
+    /**
+     * @param $value
+     * @return int
+     */
+    public function setLastLoginIpAttr($value)
+    {
+        return ip2long($value);
+    }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    public function getLastLoginIpAttr($value)
+    {
+        return $value != 0 ? long2ip($value) : '';
+    }
 }

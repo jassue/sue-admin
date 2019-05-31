@@ -32,12 +32,12 @@ class CreateAdminRuleTable extends Migrator
             ->setId(false)->setPrimaryKey('id')->setEngine('InnoDB')
             ->addColumn('id', 'biginteger', ['identity'=>true, 'signed'=>false])
             ->addColumn('parent_id', 'biginteger', ['signed'=>false, 'default'=>0])
-            ->addColumn('title', 'string', ['limit'=>20, 'default'=>''])
-            ->addColumn('name', 'string', ['limit'=>40, 'default'=>''])
+            ->addColumn('name', 'string', ['limit'=>20, 'default'=>''])
+            ->addColumn('url', 'string', ['limit'=>80, 'default'=>''])
             ->addColumn('create_time', 'integer', ['limit'=>10, 'signed'=>false])
             ->addColumn('update_time', 'integer', ['limit'=>10, 'signed'=>false])
             ->addIndex('parent_id')
-            ->addIndex('name', ['unique'=>true])
+            ->addIndex('url', ['unique'=>true])
             ->create();
     }
 

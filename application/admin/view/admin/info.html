@@ -106,7 +106,7 @@
         update : function () {
             $('.form-group').removeClass('has-error')
             $('label.error').remove()
-            $.post('/admin/admin/update', $('#form').serialize() ,function (res) {
+            $.post('/admin/admin/edit', $('#form').serialize() ,function (res) {
                 if (res.code == 0) {
                     window.location.href = '/admin/admin'
                 } else {

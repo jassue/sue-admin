@@ -32,7 +32,6 @@ class CreateAdminRoleTable extends Migrator
             ->setId(false)->setPrimaryKey('id')->setEngine('InnoDB')
             ->addColumn('id', 'biginteger', ['identity'=>true, 'signed'=>false])
             ->addColumn('name', 'string', ['limit'=>20, 'default'=>''])
-            ->addColumn('status', 'boolean', ['limit'=>1, 'default'=>1, 'signed'=>false])
             ->addColumn('create_time', 'integer', ['limit'=>10, 'signed'=>false])
             ->addColumn('update_time', 'integer', ['limit'=>10, 'signed'=>false])
             ->create();

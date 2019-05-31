@@ -10,7 +10,6 @@ namespace app\service\admin;
 
 
 use app\common\model\Admin;
-use app\common\model\AdminRole;
 use app\common\model\AdminRule;
 
 class AdminRules
@@ -26,16 +25,16 @@ class AdminRules
 
     /**
      * @param int $parentId
-     * @param string $title
      * @param string $name
+     * @param string $url
      * @return AdminRule
      */
-    public function create(int $parentId, string $title, string $name)
+    public function create(int $parentId, string $name, string $url)
     {
         return AdminRule::create([
             'parent_id' => $parentId,
-            'title'     => $title,
-            'name'      => $name
+            'title'     => $name,
+            'url'       => $url
         ]);
     }
 
@@ -51,18 +50,20 @@ class AdminRules
 
     /**
      * @param Admin $admin
-     * @param string $auth
+     * @param string $url
      * @return bool
      */
-    public function checkRuleByAdmin(Admin $admin, string $auth)
+    public function checkRuleByAdmin(Admin $admin, string $url)
     {
         $result = false;
-        $admin->roles->each(function ($role) use ($auth, &$result) {
-            if ($role->id == 1)
+        $admin->roles->each(function ($role) use ($url, &$result) {
+            if ($role->id == 1) {
                 $result = true;
-            $exists = $role->rules()->where('name', $auth)->find();
-            if ($exists)
-                $result = true;
+            } else {
+                $exists = $role->rules()->where('url', $url)->find();
+                if ($exists)
+                    $result = true;
+            }
         });
         return $result;
     }
@@ -71,13 +72,13 @@ class AdminRules
      * @param Admin $admin
      * @return array
      */
-    public function getRuleIdsByAdmin(Admin $admin)
+    public function getUrlsByAdmin(Admin $admin)
     {
-        $ruleIds = [];
+        $ruleUrls = [];
         foreach ($admin->roles as $role) {
-            $ruleIds = array_merge($ruleIds, $role->rules->column('id'));
+            $ruleUrls = array_merge($ruleUrls, $role->rules()->select()->column('url'));
         }
-        return array_unique($ruleIds);
+        return array_unique($ruleUrls);
     }
 
     /**

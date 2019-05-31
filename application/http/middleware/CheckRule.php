@@ -13,11 +13,11 @@ use app\admin\exception\NoAuthForAccessException;
 use app\service\facade\AdminRules;
 use app\service\facade\Admins;
 
-class Check
+class CheckRule
 {
-    public function handle($request, \Closure $next, string $auth)
+    public function handle($request, \Closure $next)
     {
-        if (!AdminRules::checkRuleByAdmin(Admins::user(), $auth)) {
+        if (!AdminRules::checkRuleByAdmin(Admins::user(), '/' . $request->pathinfo())) {
             if ($request->isAjax()) {
                 throw new NoAuthForAccessException();
             } else {

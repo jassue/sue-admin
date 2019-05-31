@@ -30,9 +30,9 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
                 </a>
-                {notempty name="menu['child']"}
+                {notempty name="menu['children']"}
                 <ul class="treeview-menu">
-                    {volist name="menu['child']" id="menu2"}
+                    {volist name="menu['children']" id="menu2"}
                     <li><a href="{$menu2['url']}"><i class="fa {$menu2['icon']}"></i><span> {$menu2['name']}</span></a></li>
                     {/volist}
                 </ul>

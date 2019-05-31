@@ -36,7 +36,7 @@ class CreateAdminTable extends Migrator
             ->addColumn('password', 'string', ['limit'=>60, 'default'=>''])
             ->addColumn('mobile_phone', 'string', ['limit'=>11, 'default'=>''])
             ->addColumn('status', 'boolean', ['limit'=>1, 'default'=>1, 'signed'=>false])
-            ->addColumn('last_login_ip', 'char', ['limit'=>20, 'default'=>''])
+            ->addColumn('last_login_ip', 'integer', ['limit'=>20, 'default'=>0, 'signed'=>false])
             ->addColumn('last_login_time', 'integer', ['limit'=>10, 'default'=>0, 'signed'=>false])
             ->addColumn('create_time', 'integer', ['limit'=>10, 'signed'=>false])
             ->addColumn('update_time', 'integer', ['limit'=>10, 'signed'=>false])

@@ -91,7 +91,7 @@
         create : function () {
             $('.form-group').removeClass('has-error')
             $('label.error').remove()
-            $.post('/admin/admin/save', $('#form').serialize() ,function (res) {
+            $.post('/admin/admin/create', $('#form').serialize() ,function (res) {
                 if (res.code == 0) {
                     window.location.href = '/admin/admin'
                 } else {

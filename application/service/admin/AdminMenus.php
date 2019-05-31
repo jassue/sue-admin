@@ -26,17 +26,15 @@ class AdminMenus
 
     /**
      * @param int $parentId
-     * @param int $ruleId
      * @param string $name
      * @param string $icon
      * @param string $url
      * @return AdminMenu
      */
-    public function create(int $parentId, int $ruleId, string $name, $icon = '', $url = '')
+    public function create(int $parentId, string $name, $icon = '', $url = '')
     {
         return AdminMenu::create([
             'parent_id' => $parentId,
-            'rule_id'   => $ruleId,
             'name'      => $name,
             'icon'      => $icon,
             'url'       => $url,
@@ -62,27 +60,35 @@ class AdminMenus
      */
     public function getListByAdmin(Admin $admin)
     {
-        $ruleIds = AdminRules::getRuleIdsByAdmin($admin);
-        $isSuperAdmin = in_array(1, $ruleIds) ?? false;
-        $query = AdminMenu::where('parent_id', 0);
+        $ruleUrls = AdminRules::getUrlsByAdmin($admin);
+        $isSuperAdmin = in_array('all', $ruleUrls) ?? false;
+        $query = AdminMenu::with('child')->where('parent_id', 0);
         if (!$isSuperAdmin) {
             $query->where(
-                function ($query) use ($ruleIds) {
+                function ($query) use ($ruleUrls) {
                     $query
-                        ->whereIn('rule_id', $ruleIds)
-                        ->whereOr('rule_id', 0);
+                        ->whereIn('url', $ruleUrls)
+                        ->whereOr('url', '');
                 }
             );
         }
-        $menuList = $query->select()->each(
-            function ($menu) use ($ruleIds, $isSuperAdmin) {
-                if ($isSuperAdmin)
-                    $menu->child;
-                else
-                    $menu->child = $menu->child()->whereIn('rule', $ruleIds)->select();
-                return $menu;
+        $menuList = $query->select()->map(
+            function (AdminMenu $menu) use ($ruleUrls, $isSuperAdmin) {
+                if ($isSuperAdmin) {
+                    $result = $menu->child;
+                } else {
+                    $result = $menu->child->where('url', 'in', $ruleUrls);
+                }
+                !$result->isEmpty() && $menu->children = $result;
+                if ($menu->url != '' || ($menu->url == '' && isset($menu->children))) {
+                    unset($menu->child);
+                    return $menu;
+                }
             }
-        );
+        )->filter(function ($item) {
+            return !is_null($item);
+        });
+
         return $menuList->toArray();
     }
 }

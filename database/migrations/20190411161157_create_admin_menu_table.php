@@ -32,7 +32,6 @@ class CreateAdminMenuTable extends Migrator
             ->setId(false)->setPrimaryKey('id')->setEngine('InnoDB')
             ->addColumn('id', 'biginteger', ['identity'=>true, 'signed'=>false])
             ->addColumn('parent_id', 'biginteger', ['signed'=>false, 'default'=>0])
-            ->addColumn('rule_id', 'biginteger', ['signed'=>false, 'default'=>0])
             ->addColumn('name', 'string', ['limit'=>20, 'default'=>''])
             ->addColumn('icon', 'string', ['limit'=>30, 'default'=>''])
             ->addColumn('url', 'string', ['limit'=>80, 'default'=>''])
