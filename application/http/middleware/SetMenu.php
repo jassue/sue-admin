@@ -17,7 +17,9 @@ class SetMenu
 {
     public function handle($request, \Closure $next)
     {
-        View::share('menuList', AdminMenus::getListByAdmin(Admins::user()));
+        if (!$request->isAjax()) {
+            View::share('menuList', AdminMenus::getListByAdmin(Admins::user()));
+        }
         return $next($request);
     }
 }

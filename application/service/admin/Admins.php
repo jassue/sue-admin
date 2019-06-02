@@ -138,6 +138,16 @@ class Admins
     }
 
     /**
+     * @param Admin $admin
+     * @param int $status
+     */
+    public function setStatus(Admin $admin, int $status)
+    {
+        $admin->status = $status;
+        $admin->save();
+    }
+
+    /**
      * @param array $post
      */
     public function update(array $post)

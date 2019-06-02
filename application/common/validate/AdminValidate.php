@@ -57,10 +57,17 @@ class AdminValidate extends BaseValidate
             ->append('username', 'exists:admin,username,' . BaseStatus::ENABLE . ',status');
     }
 
+    public function sceneToggleStatus()
+    {
+        return $this->only(['id', 'status'])
+            ->append('id', 'require|min:1|exists:admin,id,' . Request::param('id'))
+            ->append('status', 'require|in:' . BaseStatus::DISABLE . ',' . BaseStatus::ENABLE);
+    }
+
     public function sceneEdit()
     {
         return $this->only(['id'])
-            ->append('id', 'exists:admin,id,' . Request::param('id'));
+            ->append('id', 'require|min:1|exists:admin,id,' . Request::param('id'));
     }
 
     public function sceneUpdate()

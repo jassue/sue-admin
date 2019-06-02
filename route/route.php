@@ -27,8 +27,9 @@ Route::group('admin', function () {
             Route::post('/', 'Admin/list');
             Route::get('/create', 'Admin/create');
             Route::post('/create', 'Admin/save');
-            Route::get('/edit/:id', 'Admin/edit');
-            Route::post('/update', 'Admin/update');
+            Route::post('/toggle', 'Admin/toggleStatus');
+            Route::get('/edit', 'Admin/edit');
+            Route::post('/edit', 'Admin/update');
             Route::post('/delete', 'Admin/delete');
         });
         Route::group('/rule', function () {

@@ -36,12 +36,13 @@ class InitSeeder extends Seeder
             ['id'=>12, 'parent_id'=>8, 'name'=>'删除角色', 'url'=>'/admin/role/delete'],
             ['id'=>13, 'parent_id'=>3, 'name'=>'管理员列表', 'url'=>'/admin/admin'],
             ['id'=>14, 'parent_id'=>13, 'name'=>'添加管理员', 'url'=>'/admin/admin/create'],
-            ['id'=>15, 'parent_id'=>13, 'name'=>'编辑管理员', 'url'=>'/admin/admin/edit'],
-            ['id'=>16, 'parent_id'=>13, 'name'=>'删除管理员', 'url'=>'/admin/admin/delete'],
-            ['id'=>17, 'parent_id'=>3, 'name'=>'权限列表', 'url'=>'/admin/rule'],
-            ['id'=>18, 'parent_id'=>17, 'name'=>'添加权限', 'url'=>'/admin/rule/create'],
-            ['id'=>19, 'parent_id'=>18, 'name'=>'编辑权限', 'url'=>'/admin/rule/edit'],
-            ['id'=>20, 'parent_id'=>19, 'name'=>'删除权限', 'url'=>'/admin/rule/delete'],
+            ['id'=>15, 'parent_id'=>13, 'name'=>'切换管理员状态', 'url'=>'/admin/admin/toggle'],
+            ['id'=>16, 'parent_id'=>13, 'name'=>'编辑管理员', 'url'=>'/admin/admin/edit'],
+            ['id'=>17, 'parent_id'=>13, 'name'=>'删除管理员', 'url'=>'/admin/admin/delete'],
+            ['id'=>18, 'parent_id'=>3, 'name'=>'权限列表', 'url'=>'/admin/rule'],
+            ['id'=>19, 'parent_id'=>18, 'name'=>'添加权限', 'url'=>'/admin/rule/create'],
+            ['id'=>20, 'parent_id'=>18, 'name'=>'编辑权限', 'url'=>'/admin/rule/edit'],
+            ['id'=>21, 'parent_id'=>18, 'name'=>'删除权限', 'url'=>'/admin/rule/delete'],
         ]);
         AdminRoles::allocationRules($role, [1]);
         AdminMenus::createMany([

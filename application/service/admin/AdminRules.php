@@ -76,7 +76,7 @@ class AdminRules
     {
         $ruleUrls = [];
         foreach ($admin->roles as $role) {
-            $ruleUrls = array_merge($ruleUrls, $role->rules()->select()->column('url'));
+            $ruleUrls = array_merge($ruleUrls, $role->rules->column('url'));
         }
         return array_unique($ruleUrls);
     }

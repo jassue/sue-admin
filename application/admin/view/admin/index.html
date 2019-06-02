@@ -12,12 +12,12 @@
         <div class="box">
             <div class="box-header">
                 <div class="pull-left">
-                    <a href="" class="btn btn-sm bg-navy"><i class="fa fa-refresh"></i></a>
-                    <button type="button" onclick="admin.showSearchBox()" class="btn btn-sm bg-light-blue"><i class="fa fa-search"></i></button>
+                    <a href="" class="btn btn-sm bg-navy"><i class="fa fa-refresh"></i> 刷新</a>
+                    <button type="button" onclick="admin.showSearchBox()" class="btn btn-sm bg-light-blue"><i class="fa fa-filter"></i> 筛选</button>
                 </div>
                 <div class="pull-right">
-                    <a href="/admin/admin/create" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> 添加</a>
-                    <button type="button" disabled onclick="admin.delete(check.getSelectAll())" class="btn btn-sm btn-danger delete-all"><i class="fa fa-trash-o"></i> 删除</button>
+                    <a href="/admin/admin/create" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> 添加</a>
+                    <button type="button" disabled onclick="admin.delete(check.getSelectIds())" class="btn btn-sm btn-danger delete-all"><i class="fa fa-trash-o"></i> 删除</button>
                     <button type="button" class="btn btn-sm dropdown-toggle bg-light-blue-active" data-toggle="dropdown"><i class="fa fa-table"></i>&nbsp;&nbsp;<span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu">
                         <li><label><input checked type="checkbox" value="1" class="minimal column-select">&nbsp;&nbsp;&nbsp;ID</label></li>
@@ -59,7 +59,7 @@
                 </form>
             </div>
             <div class="box-body">
-                <table id="table" class="table table-bordered table-striped">
+                <table id="table" class="table table-bordered">
                     <thead>
                     <tr>
                         <th>
@@ -170,15 +170,36 @@
                     }
                 },
                 {"data": "mobile_phone"},
-                {"data": "status"},
+                {
+                    "data": "status",
+                    "render": function (status) {
+                        var html = ''
+                        if (status == '启用') {
+                            html = '<span class="label label-success">'+status+'</span>'
+                        } else {
+                            html = '<span class="label label-danger">'+status+'</span>'
+                        }
+                        return html
+                    }
+                },
                 {"data": "last_login_ip"},
                 {"data": "last_login_time"},
                 {"data": "create_time"},
                 {
                     "data": "id",
-                    "render": function (id) {
-                        return '<a href="/admin/admin/edit/'+id+'" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i></a>\n' +
-                        '<button onclick="admin.delete('+id+')" type="button" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i></button>\n'
+                    "render": function (id, type, row) {
+                        if (id == 1) {
+                            return ''
+                        }
+                        var html = ''
+                        if (row.status == '启用') {
+                            html += '<a href="javascript:;" onclick="admin.toggleStatus('+id+', 0)">禁用</a>'
+                        } else {
+                            html += '<a href="javascript:;" onclick="admin.toggleStatus('+id+', 1)">启用</a>'
+                        }
+                        html += '<div class="op-divider"></div><a href="/admin/admin/edit?id='+id+'">编辑</a>'
+                        html += '<div class="op-divider"></div><a href="javascript:;" onclick="admin.delete('+id+')">删除</a>'
+                        return '<span>'+html+'</span>'
                     }
                 },
             ],
@@ -190,13 +211,13 @@
             admin.dataTable = $("#" + id).DataTable(admin.tableOptions)
             admin.dataTable.on('draw', function () {
                 check.init()
+                $("input.column-select").on('ifChecked', function () {
+                    admin.dataTable.column($(this).val()).visible(true)
+                })
+                $("input.column-select").on('ifUnchecked', function () {
+                    admin.dataTable.column($(this).val()).visible(false)
+                })
             } );
-            $("input.column-select").on('ifChecked', function () {
-                admin.dataTable.column($(this).val()).visible(true)
-            })
-            $("input.column-select").on('ifUnchecked', function () {
-                admin.dataTable.column($(this).val()).visible(false)
-            })
         },
         showSearchBox: function () {
             if ($('#search-box').hasClass('hide')) {
@@ -207,6 +228,17 @@
         },
         search: function () {
             admin.dataTable.ajax.reload()
+        },
+        toggleStatus(id, status) {
+            $.post("/admin/admin/toggle", {id: id, status: status}, function (res) {
+                if (res.code == 0) {
+                    admin.dataTable.ajax.reload()
+                } else {
+                    $.modal.alert({
+                        msg: res.message
+                    })
+                }
+            })
         },
         delete: function (id) {
             if (id.length == 0) {
@@ -224,7 +256,7 @@
                 yes: function () {
                     $.post("/admin/admin/delete", {ids: ids}, function (res) {
                         if (res.code == 0) {
-                            window.location.reload()
+                            admin.dataTable.ajax.reload()
                         } else {
                             $.modal.alert({
                                 msg: res.message

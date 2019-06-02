@@ -17,6 +17,16 @@ ul.pagination {
 table th, table td {
     text-align: center;
 }
+.op-divider {
+    display:inline-block;
+    width: 1px;
+    margin: 0 8px;
+    height: 0.9em;
+    position:relative;
+    top:-.06em;
+    background: #e8e8e8;
+    vertical-align: middle
+}
 /*info page*/
 .control-label.error,.check-container > label {
     font-weight: normal;

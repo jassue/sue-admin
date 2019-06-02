@@ -99,17 +99,31 @@ class Admin extends AdminBaseController
     }
 
     /**
-     * @param $id
+     * @param Request $request
+     * @return \think\response\Json
+     * @throws AdminCantBeOperatedException
+     */
+    public function toggleStatus(Request $request)
+    {
+        if ($request->post('id') == 1)
+            throw new AdminCantBeOperatedException();
+        (new AdminValidate())->goCheck('toggleStatus');
+        Admins::setStatus(Admins::getById($request->post('id')), $request->post('status'));
+        return $this->json(new SuccessResult());
+    }
+
+    /**
+     * @param Request $request
      * @return \think\response\View
      * @throws AdminCantBeOperatedException
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        if ($id == 1)
+        if ($request->get('id') == 1)
             throw new AdminCantBeOperatedException();
         (new AdminValidate())->goCheck('edit');
         return view('info', [
-            'info' => Admins::getInfoWithRolesById($id),
+            'info' => Admins::getInfoWithRolesById($request->get('id')),
             'roleList' => AdminRoles::getList()
         ]);
     }
