@@ -53,23 +53,14 @@ class AdminRoles
     }
 
     /**
-     * @param int $length
-     * @param string $roleName
-     * @return mixed
+     * @param int $page
+     * @param int $size
+     * @return \think\Paginator
      * @throws \think\exception\DbException
      */
-    public function getPaginateListWithRules(int $length, string $roleName)
+    public function getPaginateList(int $page, int $size)
     {
-        $where = [];
-        !empty($roleName) && $where[] = ['name', 'like', "{$roleName}%"];
-        return AdminRole::with('rules')
-            ->where($where)
-            ->paginate($length, false, ['query' => request()->param()])
-            ->withAttr('rules',
-                function ($values) {
-                    return $values->column('name');
-                }
-            );
+        return AdminRole::paginate($size,false, ['page' => $page]);
     }
 
     /**

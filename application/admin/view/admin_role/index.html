@@ -1,0 +1,182 @@
+{extend name="layout/base" /}
+{block name="title"}{$title ?? '角色组'}{/block}
+{block name="pageHeader"}角色组{/block}
+{block name="description"}每个角色组可以有多个权限{/block}
+{block name="css"}
+<link rel="stylesheet" href="__COMPONENTS__/datatables.net-bs/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="__PLUGINS__/iCheck/all.css">
+{/block}
+{block name="body"}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <div class="pull-left">
+                    <a href="" class="btn btn-sm bg-navy"><i class="fa fa-refresh"></i> 刷新</a>
+                </div>
+                <div class="pull-right">
+                    <a href="/admin/role/create" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> 添加</a>
+                    <button type="button" disabled onclick="admin.delete(check.getSelectIds())" class="btn btn-sm btn-danger delete-all"><i class="fa fa-trash-o"></i> 删除</button>
+                    <button type="button" class="btn btn-sm dropdown-toggle bg-light-blue-active" data-toggle="dropdown"><i class="fa fa-table"></i>&nbsp;&nbsp;<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><label><input checked type="checkbox" value="1" class="minimal column-select">&nbsp;&nbsp;&nbsp;ID</label></li>
+                        <li><label><input checked type="checkbox" value="2" class="minimal column-select">&nbsp;&nbsp;&nbsp;名称</label></li>
+                        <li><label><input checked type="checkbox" value="3" class="minimal column-select">&nbsp;&nbsp;&nbsp;创建时间</label></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="table-responsive">
+                <table id="table" class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input id="select-all" type="checkbox" class="minimal">
+                        </th>
+                        <th>ID</th>
+                        <th>名称</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="__PLUGINS__/iCheck/icheck.min.js"></script>
+<script src="__COMPONENTS__/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="__COMPONENTS__/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript">
+    menuJs.show('/admin/role')
+    let check = {
+        init: function () {
+            $('input[type="checkbox"].minimal').iCheck({
+                checkboxClass: 'icheckbox_minimal-blue'
+            })
+            $('#select-all').on('ifChecked', function () {
+                $("input[name='rowId']").iCheck('check')
+            })
+            $('#select-all').on('ifUnchecked', function () {
+                $("input[name='rowId']").iCheck('uncheck')
+            })
+            $("table input[name='rowId']").on('ifChanged', function () {
+                if (check.getSelectIds().length == 0) {
+                    $('.delete-all').attr('disabled', true)
+                } else {
+                    $('.delete-all').attr('disabled', false)
+                }
+            })
+        },
+        getSelectIds: function () {
+            let ids = [];
+            $("table input:checked[name='rowId']").each(function () {
+                ids.push(parseInt($(this).val()));
+            });
+            return ids;
+        }
+    }
+    let role = {
+        dataTable: null,
+        tableOptions: {
+            "searching": false,
+            "ordering": false,
+            "serverSide": true,
+            "ajax": {
+                "type": "post",
+                "url": "/admin/role",
+                "data": function (data) {
+                    data.page = parseInt(data.start/data.length) + 1
+                },
+                "dataSrc": function (result) {
+                    if (result.code != 0) {
+                        $.modal.alert({
+                            msg: result.message
+                        })
+                        result.draw = result.data.draw
+                        result.recordsTotal = 0
+                        result.recordsFiltered = 0
+                        result.data.data = {}
+                    } else {
+                        result.draw = result.data.draw
+                        result.recordsTotal = result.data.count
+                        result.recordsFiltered = result.data.count
+                    }
+                    return result.data.data
+                },
+            },
+            "columns": [
+                {
+                    "data": "id",
+                    "render": function (id) {
+                        return '<input name="rowId" type="checkbox" class="minimal" value="'+id+'">'
+                    }
+                },
+                {"data": "id"},
+                {"data": "name"},
+                {"data": "create_time"},
+                {
+                    "data": "id",
+                    "render": function (id) {
+                        if (id == 1) {
+                            return ''
+                        }
+                        var html = '<a href="/admin/role/edit?id='+id+'">编辑</a>'
+                        html += '<div class="op-divider"></div><a href="javascript:;" onclick="role.delete('+id+')">删除</a>'
+                        return '<span>'+html+'</span>'
+                    }
+                },
+            ],
+            "language": {
+                "url": "__ADMIN__/config/dataTables.zh_CN.json"
+            }
+        },
+        initTable: function (id) {
+            role.dataTable = $("#" + id).DataTable(role.tableOptions)
+            role.dataTable.on('draw', function () {
+                check.init()
+                $("input.column-select").on('ifChecked', function () {
+                    role.dataTable.column($(this).val()).visible(true)
+                })
+                $("input.column-select").on('ifUnchecked', function () {
+                    role.dataTable.column($(this).val()).visible(false)
+                })
+            } );
+        },
+        delete: function (id) {
+            if (id.length == 0) {
+                $.modal.alert('您还未未选中任何数据')
+                return false
+            }
+            let ids = []
+            if (id.length > 0) {
+                ids = id
+            } else {
+                ids.push(id)
+            }
+            $.modal.confirm({
+                msg: '确定删除数据吗？',
+                yes: function () {
+                    $.post("/admin/role/delete", {ids: ids}, function (res) {
+                        if (res.code == 0) {
+                            role.dataTable.ajax.reload()
+                        } else {
+                            $.modal.alert({
+                                msg: res.message
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    }
+    $(function () {
+        role.initTable('table')
+    })
+</script>
+{/block}

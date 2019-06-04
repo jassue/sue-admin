@@ -62,7 +62,7 @@
                     <div class="form-group">
                         <label class="control-label col-sm-2">角色</label>
                         <div class="col-sm-6">
-                            <div>
+                            <div class="check-container">
                                 {foreach name="roleList" item="role"}
                                 <label class="control-label"><input name="roles[]" type="checkbox" class="minimal" value="{$role->id}"> {$role->name}</label>
                                 {/foreach}

@@ -20,7 +20,10 @@ Route::group('admin', function () {
     Route::group('/', function () {
         Route::get('/', 'Index/index');
         Route::group('/role', function () {
-            Route::get('/', 'Role/index');
+            Route::get('/', 'AdminRole/index');
+            Route::post('/', 'AdminRole/list');
+            Route::get('/create', 'AdminRole/create');
+            Route::post('/create', 'AdminRole/save');
         });
         Route::group('/admin', function () {
             Route::get('/', 'Admin/index');

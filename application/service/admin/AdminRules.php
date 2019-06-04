@@ -87,7 +87,7 @@ class AdminRules
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    public function getList()
+    public function getChildList()
     {
         return AdminRule::with('child.child')->where('parent_id', 1)->select();
     }

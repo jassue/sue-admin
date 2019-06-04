@@ -48,9 +48,7 @@ class Admin extends AdminBaseController
      */
     public function index()
     {
-        return view('index', [
-            'adminList' => []
-        ]);
+        return view('index');
     }
 
     /**

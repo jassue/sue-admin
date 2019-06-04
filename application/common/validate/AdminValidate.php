@@ -53,7 +53,7 @@ class AdminValidate extends BaseValidate
     public function sceneLogin()
     {
         return $this->only(['username', 'password'])
-            ->remove('username', 'unique')
+            ->remove('username', ['alpha', 'min', 'unique'])
             ->append('username', 'exists:admin,username,' . BaseStatus::ENABLE . ',status');
     }
 
