@@ -4,12 +4,6 @@
 {block name="description"}创建{/block}
 {block name="css"}
 <link rel="stylesheet" href="__PLUGINS__/iCheck/all.css">
-<!--<link rel="stylesheet" href="__PLUGINS__/bootstrap-treeview/bootstrap-treeview.min.css">-->
-<style>
-    .list-group-item {
-        border: none;
-    }
-</style>
 {/block}
 {block name="body"}
 <div class="row">
@@ -39,7 +33,7 @@
                     </div>
                 </div>
                 <div class="box-footer">
-                    <button type="button" onclick="admin.create()" class="btn btn-primary pull-right">提交</button>
+                    <button type="button" onclick="role.create()" class="btn btn-primary pull-right">提交</button>
                 </div>
             </form>
         </div>
@@ -51,21 +45,18 @@
 <script src="__PLUGINS__/bootstrap-treeview/bootstrap-treeview.min.js"></script>
 <script type="text/javascript">
     menuJs.show('/admin/role')
-    var tree = [
+    var treedata = [
         {
-            text:"Parent 1",
+            text:" 管理",
             nodes: [
                 {
-                    icon:"glyphicon glyphicon-stop",
-                    selectedIcon:"glyphicon glyphicon-stop",
-                    selectable:true,
-                    text:"Child 1",
+                    text:" Child 1",
                     nodes: [
                         {
-                            text:"Grandchild 1"
+                            text:" Grandchild 1"
                         },
                         {
-                            text:"Grandchild 2"
+                            text:" Grandchild 2"
                         }
                     ]
                 },
@@ -75,28 +66,78 @@
             ]
         },
         {
-            text:"Parent 2"
+            text:" Parent 2"
         },
     ];
-    let role = {
+    let tree = {
+        initTree: function (id) {
+            $("#" + id).treeview({
+                data: treedata,
+                levels: 3,
+                showCheckbox: true,
+                showBorder: false,
+                highlightSelected: false,
+                expandIcon: "fa fa-caret-right",
+                collapseIcon: "fa fa-caret-down",
+                uncheckedIcon: "fa fa-square-o fa-lg",
+                checkedIcon: "fa fa-check-square-o fa-lg",
+                onhoverColor: "#fff",
+                onNodeChecked: function(event, node) {
+                    tree.operatedChildNodes(id, node, "checkNode")
+                    tree.toggleParentNodeState(id, node, "checked")
+                },
+                onNodeUnchecked: function (event, node) {
+                    tree.operatedChildNodes(id, node, "uncheckNode")
+                    tree.toggleParentNodeState(id, node, "unchecked")
+                }
+            })
+        },
+        operatedChildNodes: function (id, parentNode, eventName) {
+            if (parentNode.nodes != undefined) {
+                for (var i = 0; i < parentNode.nodes.length; i++) {
+                    $("#" + id).treeview(eventName, [ parentNode.nodes[i].nodeId, { silent: true } ]);
+                    tree.operatedChildNodes(id, parentNode.nodes[i], eventName)
+                }
+            }
+        },
+        toggleParentNodeState: function (id, node, curNodeState) {
+            if (curNodeState == "checked") {
+                var sibNode = $("#" + id).treeview("getSiblings", node)
+                var result = true
+                for (let i = 0; i < sibNode.length; i++) {
+                    if (sibNode[i].state.checked == false) {
+                        result = false
+                    }
+                }
+                if (result == true) {
+                    if (node.parentId != undefined) {
+                        $("#" + id).treeview("checkNode", [ node.parentId, { silent: true } ])
+                        var parentNode = $("#" + id).treeview("getParent", node)
+                        tree.toggleParentNodeState(id, parentNode, "checked")
+                    } else {
+                        $("#" + id).treeview("checkNode", [ node, { silent: true } ])
+                    }
+                }
+            }
+            if (curNodeState == "unchecked") {
+                if (node.parentId != undefined) {
+                    var parentNode = $("#" + id).treeview("getParent", node)
+                    if (parentNode.state.checked == true) {
+                        $("#" + id).treeview('uncheckNode', [ parentNode, { silent: true } ])
+                        tree.toggleParentNodeState(id, parentNode, "unchecked")
+                    }
+                }
+            }
+        }
+    }
+    let check = {
         initCheck : function () {
             $('input[type="checkbox"].minimal').iCheck({
                 checkboxClass: 'icheckbox_minimal-blue'
             })
-        },
-        initRuleTree: function () {
-            $("#ruleTree").treeview({
-                data: tree,
-                levels: 1,
-                multiSelect: true,
-                onNodeSelected: function(event, node) {
-                    $('#selectable-output').prepend('<p>' + node.text + ' was selected</p>');
-                },
-                onNodeUnselected: function (event, node) {
-                    $('#selectable-output').prepend('<p>' + node.text + ' was unselected</p>');
-                }
-            })
-        },
+        }
+    }
+    let role = {
         create : function () {
             $('.form-group').removeClass('has-error')
             $('label.error').remove()
@@ -113,8 +154,8 @@
         },
     }
     $(function () {
-        role.initCheck()
-        role.initRuleTree()
+        check.initCheck()
+        tree.initTree("ruleTree")
     })
 </script>
 {/block}

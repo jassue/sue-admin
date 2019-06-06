@@ -37,6 +37,9 @@ table th, table td {
 .help-block {
     margin: 0px;
 }
+li.list-group-item {
+    padding: 5px 15px;
+}
 /*modal*/
 .modal > .modal-dialog {
     width: 350px;
