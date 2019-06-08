@@ -153,6 +153,9 @@
                 {
                     "data": "id",
                     "render": function (id) {
+                        if (id == 1) {
+                            return ''
+                        }
                         return '<input name="rowId" type="checkbox" class="minimal" value="'+id+'">'
                     }
                 },

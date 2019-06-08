@@ -12,10 +12,11 @@ namespace app\service\admin;
 use app\common\enum\BaseStatus;
 use app\common\model\Admin;
 use app\common\model\AdminRoleRelation;
-use think\facade\Log;
+use app\common\model\BaseUser;
+use app\service\UserInterface;
 use think\facade\Session;
 
-class Admins
+class Admins implements UserInterface
 {
     /**
      * @param int $id
@@ -48,10 +49,11 @@ class Admins
     /**
      * @param Admin $admin
      * @param array $roleIds
+     * @throws \think\Exception
      */
     public function bindRoles(Admin $admin, array $roleIds)
     {
-        $admin->roles()->saveAll($roleIds);
+        $admin->roles()->attach($roleIds);
     }
 
     /**
@@ -82,19 +84,24 @@ class Admins
      */
     public function setPassword(Admin $admin, string $password)
     {
-        $admin->setAttr('password', Admin::makePassword($password));
+        $admin->setPassword($password);
         $admin->save();
     }
 
     /**
-     * @param Admin $admin
+     * @param BaseUser $admin
      */
-    public function login(Admin $admin)
+    public function login(BaseUser $admin)
     {
         $admin->last_login_ip = request()->ip();
         $admin->last_login_time = time();
         $admin->save();
         Session::set('admin', $admin);
+    }
+
+    public function logout()
+    {
+        Session::delete('admin');
     }
 
     /**
@@ -110,7 +117,7 @@ class Admins
      */
     public function user()
     {
-        return Session::get('admin');
+        return $this->getById(Session::get('admin')->id);
     }
 
     /**
@@ -177,7 +184,7 @@ class Admins
                 $roleIds = array_merge(array_diff($roleIds, array($roleId)));
         }
         !empty($needUnbindIds) && $this->unbindRoles($admin, $needUnbindIds);
-        !empty($roleIds) && $admin->roles()->attach($roleIds);
+        !empty($roleIds) && $this->bindRoles($admin, $roleIds);
     }
 
     /**
@@ -203,7 +210,7 @@ class Admins
      * @param int $id
      * @return mixed
      */
-    public function getInfoWithRolesById(int $id)
+    public function getInfoById(int $id)
     {
         $admin = $this->getById($id);
         $admin->roleIds = $admin->roles()->select()->column('id');

@@ -9,14 +9,13 @@
 namespace app\http\middleware;
 
 
-use app\service\facade\Admins;
 use app\common\exception\NotLoginInException;
 
 class Auth
 {
     public function handle($request, \Closure $next, string $guard)
     {
-        if (!Admins::checkLogin()) {
+        if (!config('auth.guard')[$guard]::checkLogin()) {
             if ($request->isAjax()) {
                 throw new NotLoginInException();
             } else {

@@ -17,6 +17,7 @@ Route::get('/', function () {
 Route::group('admin', function () {
     Route::get('/login', 'Admin/loginPage');
     Route::post('/login', 'Admin/login');
+    Route::get('/logout', 'Admin/logout')->middleware('Auth:admin');
     Route::group('/', function () {
         Route::get('/', 'Index/index');
         Route::group('/role', function () {
@@ -24,6 +25,9 @@ Route::group('admin', function () {
             Route::post('/', 'AdminRole/list');
             Route::get('/create', 'AdminRole/create');
             Route::post('/create', 'AdminRole/save');
+            Route::get('/edit', 'AdminRole/edit');
+            Route::post('/edit', 'AdminRole/update');
+            Route::post('/delete', 'AdminRole/delete');
         });
         Route::group('/admin', function () {
             Route::get('/', 'Admin/index');

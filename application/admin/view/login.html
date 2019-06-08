@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="__COMPONENTS__/Ionicons/css/ionicons.min.css">
   <link rel="stylesheet" href="__ADMIN__/css/AdminLTE.min.css">
   <link rel="stylesheet" href="__PLUGINS__/iCheck/square/blue.css">
+  <link rel="stylesheet" href="__ADMIN__/css/custom.css">
   <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -50,6 +51,7 @@
 <script src="__COMPONENTS__/jquery/dist/jquery.min.js"></script>
 <script src="__COMPONENTS__/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="__PLUGINS__/iCheck/icheck.min.js"></script>
+<script src="__ADMIN__/js/custom.js"></script>
 <script>
   let login = {
     initCheck : function () {
@@ -65,7 +67,9 @@
           if (res.code == 0) {
             window.location.href = '/admin'
           } else {
-            alert(res.message)
+            $.modal.alert({
+                msg: res.message
+            })
           }
         })
       })

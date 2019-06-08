@@ -41,7 +41,7 @@ class ExceptionHandle extends Handle
     {
         Log::close();
         if (Request::isGet())
-            return redirect(Request::server('HTTP_REFERER'));
+            return redirect(Request::server('HTTP_REFERER') ?? '/');
         return json((new RestfulResult(ExceptionCode::CODE_VALIDATE_ERROR, null, $e->getError()))->toArray());
     }
 
@@ -53,7 +53,7 @@ class ExceptionHandle extends Handle
     {
         Log::close();
         if (Request::isGet())
-            return redirect(Request::server('HTTP_REFERER'));
+            return redirect(Request::server('HTTP_REFERER') ?? '/');
         return json((new RestfulResult($e->getCode(), null, $e->getMessage()))->toArray());
     }
 }

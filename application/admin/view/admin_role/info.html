@@ -1,7 +1,7 @@
 {extend name="layout/base" /}
 {block name="title"}{$title ?? '角色组'}{/block}
 {block name="pageHeader"}角色组{/block}
-{block name="description"}创建{/block}
+{block name="description"}编辑{/block}
 {block name="css"}
 <link rel="stylesheet" href="__PLUGINS__/iCheck/all.css">
 {/block}
@@ -10,7 +10,7 @@
     <div id="content" class="col-xs-12">
         <div class="box box-info">
             <div class="box-header">
-                <h3 class="box-title">创建 <a href="javascript:history.go(-1)"><i class="fa fa-undo"></i></a></h3>
+                <h3 class="box-title">编辑 <a href="javascript:history.go(-1)"><i class="fa fa-undo"></i></a></h3>
             </div>
             <form id="form" class="form-horizontal">
                 <div class="box-body">
@@ -19,7 +19,7 @@
                         <div class="col-sm-4">
                             <div class="input-group">
                                 <div class="input-group-addon"><i class="fa fa-pencil"></i></div>
-                                <input id="name" name="name" type="text" class="form-control" value="">
+                                <input id="name" name="name" type="text" class="form-control" value="{$info['name'] ?? ''}">
                             </div>
                         </div>
                     </div>
@@ -35,7 +35,8 @@
                 </div>
                 <div class="box-footer">
                     <input id="ruleList" type="hidden" value="{$ruleList}">
-                    <button type="button" onclick="role.create()" class="btn btn-primary pull-right">提交</button>
+                    <input id="info" type="hidden" value="{$info ?? ''}">
+                    <button type="button" onclick="role.update()" class="btn btn-primary pull-right">提交</button>
                 </div>
             </form>
         </div>
@@ -58,6 +59,9 @@
                     let nodeObj = {}
                     nodeObj.text = ' ' + data[i].name
                     nodeObj.id = data[i].id
+                    if ($.inArray(data[i].id, role.getInfo().ruleIds) >= 0) {
+                        nodeObj.state = {selected: true}
+                    }
                     if (data[i].child != undefined && data[i].child.length > 0) {
                         nodeObj.nodes = tree.buildData(data[i].child)
                     }
@@ -141,10 +145,13 @@
         }
     }
     let role = {
-        create : function () {
+        getInfo: function () {
+            return JSON.parse($("#info").val())
+        },
+        update : function () {
             $('.form-group').removeClass('has-error')
             $('label.error').remove()
-            $.post('/admin/role/create', {name: $("#name").val(), rules: tree.getAllCheckedIds()} ,function (res) {
+            $.post('/admin/role/edit', {id: role.getInfo().id, name: $("#name").val(), rules: tree.getAllCheckedIds()} ,function (res) {
                 if (res.code == 0) {
                     window.location.href = '/admin/role'
                 } else {

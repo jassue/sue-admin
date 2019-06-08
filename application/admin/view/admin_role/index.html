@@ -16,7 +16,7 @@
                 </div>
                 <div class="pull-right">
                     <a href="/admin/role/create" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> 添加</a>
-                    <button type="button" disabled onclick="admin.delete(check.getSelectIds())" class="btn btn-sm btn-danger delete-all"><i class="fa fa-trash-o"></i> 删除</button>
+                    <button type="button" disabled onclick="role.delete(check.getSelectIds())" class="btn btn-sm btn-danger delete-all"><i class="fa fa-trash-o"></i> 删除</button>
                     <button type="button" class="btn btn-sm dropdown-toggle bg-light-blue-active" data-toggle="dropdown"><i class="fa fa-table"></i>&nbsp;&nbsp;<span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu">
                         <li><label><input checked type="checkbox" value="1" class="minimal column-select">&nbsp;&nbsp;&nbsp;ID</label></li>
@@ -112,6 +112,9 @@
                 {
                     "data": "id",
                     "render": function (id) {
+                        if (id == 1) {
+                            return ''
+                        }
                         return '<input name="rowId" type="checkbox" class="minimal" value="'+id+'">'
                     }
                 },

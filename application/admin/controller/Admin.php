@@ -9,12 +9,13 @@
 namespace app\admin\controller;
 
 
-use app\admin\exception\AdminCantBeOperatedException;
+use app\admin\exception\IllegalOperatedDataException;
 use app\service\facade\AdminRoles;
 use app\service\facade\Admins;
 use app\common\exception\InvalidPasswordException;
 use app\common\response\SuccessResult;
 use app\common\validate\AdminValidate;
+use think\Db;
 use think\Request;
 
 class Admin extends AdminBaseController
@@ -41,6 +42,15 @@ class Admin extends AdminBaseController
             throw new InvalidPasswordException();
         Admins::login($admin);
         return $this->json(new SuccessResult());
+    }
+
+    /**
+     * @return \think\response\Redirect
+     */
+    public function logout()
+    {
+        Admins::logout();
+        return redirect('/admin/login');
     }
 
     /**
@@ -99,12 +109,9 @@ class Admin extends AdminBaseController
     /**
      * @param Request $request
      * @return \think\response\Json
-     * @throws AdminCantBeOperatedException
      */
     public function toggleStatus(Request $request)
     {
-        if ($request->post('id') == 1)
-            throw new AdminCantBeOperatedException();
         (new AdminValidate())->goCheck('toggleStatus');
         Admins::setStatus(Admins::getById($request->post('id')), $request->post('status'));
         return $this->json(new SuccessResult());
@@ -113,15 +120,12 @@ class Admin extends AdminBaseController
     /**
      * @param Request $request
      * @return \think\response\View
-     * @throws AdminCantBeOperatedException
      */
     public function edit(Request $request)
     {
-        if ($request->get('id') == 1)
-            throw new AdminCantBeOperatedException();
         (new AdminValidate())->goCheck('edit');
         return view('info', [
-            'info' => Admins::getInfoWithRolesById($request->get('id')),
+            'info' => Admins::getInfoById($request->get('id')),
             'roleList' => AdminRoles::getList()
         ]);
     }
@@ -129,31 +133,30 @@ class Admin extends AdminBaseController
     /**
      * @param Request $request
      * @return \think\response\Json
-     * @throws AdminCantBeOperatedException
      */
     public function update(Request $request)
     {
-        if ($request->post('id') == 1)
-            throw new AdminCantBeOperatedException();
         (new AdminValidate())->goCheck('update');
         $args = $request->post();
         if (empty($args['password']))
             unset($args['password']);
-        Admins::update($args);
-        Admins::toggleRoles(Admins::getById($args['id']), $args['roles']);
+        Db::transaction(function () use ($args) {
+            Admins::update($args);
+            Admins::toggleRoles(Admins::getById($args['id']), $args['roles']);
+        });
         return $this->json(new SuccessResult());
     }
 
     /**
      * @param Request $request
      * @return \think\response\Json
-     * @throws AdminCantBeOperatedException
+     * @throws IllegalOperatedDataException
      */
     public function delete(Request $request)
     {
         $ids = $request->post('ids');
         if (in_array(1, $ids))
-            throw new AdminCantBeOperatedException();
+            throw new IllegalOperatedDataException();
         Admins::delete($ids);
         return $this->json(new SuccessResult());
     }

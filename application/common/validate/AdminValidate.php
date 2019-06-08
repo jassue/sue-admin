@@ -16,7 +16,7 @@ class AdminValidate extends BaseValidate
 {
     protected $rule = [
         'username' => 'require|alpha|min:4|unique:admin',
-        'name' => 'require|min:4|max:16',
+        'name' => 'require|min:2|max:16',
         'password' => 'require|min:6|max:16',
         're_password' => 'require|confirm:password',
         'mobile' => 'require|mobile|unique:admin,mobile_phone',
@@ -25,7 +25,8 @@ class AdminValidate extends BaseValidate
 
     protected $message = [
         'id.require' => 'id不能为空',
-        'id.min' => 'id错误',
+        'id.integer' => 'id必须为整数',
+        'id.egt'     => 'id数据错误',
         'id.exists' => 'id不存在',
         'username.require' => '请输入用户名',
         'username.alpha' => '用户名必须为字母',
@@ -60,14 +61,14 @@ class AdminValidate extends BaseValidate
     public function sceneToggleStatus()
     {
         return $this->only(['id', 'status'])
-            ->append('id', 'require|min:1|exists:admin,id,' . Request::param('id'))
+            ->append('id', 'require|integer|egt:2|exists:admin')
             ->append('status', 'require|in:' . BaseStatus::DISABLE . ',' . BaseStatus::ENABLE);
     }
 
     public function sceneEdit()
     {
         return $this->only(['id'])
-            ->append('id', 'require|min:1|exists:admin,id,' . Request::param('id'));
+            ->append('id', 'require|integer|egt:2|exists:admin');
     }
 
     public function sceneUpdate()
@@ -75,7 +76,7 @@ class AdminValidate extends BaseValidate
         return $this->remove('password', 'require')
             ->remove('re_password', 'require')
             ->append('re_password', 'requireWith:password')
-            ->append('id', 'require|min:1|exists:admin,id,' . Request::param('id'))
+            ->append('id', 'require|integer|egt:2|exists:admin')
             ->append('status', 'require|in:' . BaseStatus::DISABLE . ',' . BaseStatus::ENABLE);
     }
 }
