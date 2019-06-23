@@ -1,0 +1,80 @@
+{extend name="layout/base" /}
+{block name="title"}{$title ?? '权限规则'}{/block}
+{block name="pageHeader"}权限规则{/block}
+{block name="description"}{$info ? '编辑' : '创建'}{/block}
+{block name="css"}
+<link rel="stylesheet" href="__PLUGINS__/iCheck/all.css">
+{/block}
+{block name="body"}
+<div class="row">
+    <div id="content" class="col-xs-12">
+        <div class="box box-info">
+            <div class="box-header">
+                <h3 class="box-title">{$info ? '编辑' : '创建'} <a href="javascript:history.go(-1)"><i class="fa fa-undo"></i></a></h3>
+            </div>
+            <form id="form" class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 required">上级权限</label>
+                        <div class="col-sm-4">
+                            <select name="parent_id" class="form-control">
+                                <option value="1">顶级权限</option>
+                                {foreach name="ruleList" item="rule1"}
+                                <option value="{$rule1.id}" {eq name="parent_id" value="$rule1.id"} selected {/eq}>&nbsp;&nbsp;&nbsp;&nbsp;{$rule1.name}</option>
+                                {notempty name="rule1.child"}
+                                    {foreach name="rule1.child" item="rule2"}
+                                    <option value="{$rule2.id}" {eq name="parent_id" value="$rule2.id"} selected {/eq}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$rule2.name}</option>
+                                    {/foreach}
+                                {/notempty}
+                                {/foreach}
+                            </select>
+                            <span class="help-block">权限最多为三级</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 required">名称</label>
+                        <div class="col-sm-4">
+                            <input name="name" type="text" class="form-control" value="{$info.name ?? ''}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 required">链接</label>
+                        <div class="col-sm-4">
+                            <input name="url" type="text" class="form-control" value="{$info.url ?? ''}">
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    {notempty name="info"}
+                    <input name="id" type="hidden" value="{$info->id}">
+                    {/notempty}
+                    <button type="button" onclick="rule.submit()" class="btn btn-primary pull-right">提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="__PLUGINS__/iCheck/icheck.min.js"></script>
+<script src="__PLUGINS__/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+<script type="text/javascript">
+    menuJs.show('/admin/rule')
+    let rule = {
+        submit: function () {
+            $('.form-group').removeClass('has-error')
+            $('label.error').remove()
+            $.post("{$info ? '/admin/rule/edit' : '/admin/rule/create'}", $("#form").serialize() ,function (res) {
+                if (res.code == 0) {
+                    window.location.href = '/admin/rule'
+                } else {
+                    for (let key in res.message) {
+                        let node = $("[name=\'" + key + "\'], [name=\'"+ key + "[]" + "\']").parents('.form-group').addClass('has-error')
+                        node.children('label').after('<label class="control-label error"><i class="fa fa-times"></i> '+res.message[key]+'</label>')
+                    }
+                }
+            })
+        }
+    }
+</script>
+{/block}

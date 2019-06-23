@@ -32,11 +32,11 @@ class AdminRoleValidate extends BaseValidate
     public function sceneEdit()
     {
         return $this->only(['id'])
-            ->append('id', 'require|integer|eqt:2|exists:admin_role');
+            ->append('id', 'require|integer|egt:2|exists:admin_role');
     }
 
     public function sceneUpdate()
     {
-        return $this->append('id', 'require|integer|eqt:2|exists:admin_role');
+        return $this->append('id', 'require|integer|egt:2|exists:admin_role');
     }
 }

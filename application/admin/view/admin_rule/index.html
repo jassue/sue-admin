@@ -1,0 +1,164 @@
+{extend name="layout/base" /}
+{block name="title"}{$title ?? '权限规则'}{/block}
+{block name="pageHeader"}权限规则{/block}
+{block name="description"}一个权限对应一个url,同时左侧菜单栏数据也从权限中体现{/block}
+{block name="css"}
+<!--<link rel="stylesheet" href="__COMPONENTS__/datatables.net-bs/css/dataTables.bootstrap.min.css">-->
+<link rel="stylesheet" href="__PLUGINS__/jquery-treetable/jquery.treetable.css">
+<link rel="stylesheet" href="__PLUGINS__/iCheck/all.css">
+{/block}
+{block name="body"}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <div class="pull-left">
+                    <a href="" class="btn btn-sm bg-navy"><i class="fa fa-refresh"></i> 刷新</a>
+                </div>
+                <div class="pull-right">
+                    <a href="/admin/rule/create" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> 添加</a>
+                </div>
+            </div>
+            <div class="box-body">
+                <table id="table" class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th width="3%"></th>
+                        <th>ID</th>
+                        <th>名称</th>
+                        <th>链接</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach name="ruleList" item="rule1"}
+                    <tr data-tt-id="{$rule1.id}">
+                        <td></td>
+                        <td>{$rule1.id}</td>
+                        <td>{$rule1.name}</td>
+                        <td>{$rule1.url}</td>
+                        <td>{$rule1.create_time}</td>
+                        <td>
+                            <a href="/admin/rule/edit?id={$rule1.id}">编辑</a>
+                            <div class="op-divider"></div>
+                            <a href="/admin/rule/create?pid={$rule1.id}">添加子权限</a>
+                            <div class="op-divider"></div>
+                            <a href="javascript:;" onclick="rule.delete({$rule1.id})">删除</a>
+                        </td>
+                    </tr>
+                    {notempty name="rule1.child"}
+                    {foreach name="rule1.child" item="rule2"}
+                    <tr data-tt-id="{$rule2.id}" data-tt-parent-id="{$rule2.parent_id}">
+                        <td></td>
+                        <td>{$rule2.id}</td>
+                        <td>{$rule2.name}</td>
+                        <td>{$rule2.url}</td>
+                        <td>{$rule2.create_time}</td>
+                        <td>
+                            <a href="/admin/rule/edit?id={$rule2.id}">编辑</a>
+                            <div class="op-divider"></div>
+                            <a href="/admin/rule/create?pid={$rule2.id}">添加子权限</a>
+                            <div class="op-divider"></div>
+                            <a href="javascript:;" onclick="rule.delete({$rule2.id})">删除</a>
+                        </td>
+                    </tr>
+                    {notempty name="rule2.child"}
+                    {foreach name="rule2.child" item="rule3"}
+                    <tr data-tt-id="{$rule3.id}" data-tt-parent-id="{$rule3.parent_id}">
+                        <td></td>
+                        <td>{$rule3.id}</td>
+                        <td>{$rule3.name}</td>
+                        <td>{$rule3.url}</td>
+                        <td>{$rule3.create_time}</td>
+                        <td>
+                            <a href="/admin/rule/edit?id={$rule3.id}">编辑</a>
+                            <div class="op-divider"></div>
+                            <a href="javascript:;" onclick="rule.delete({$rule3.id})">删除</a>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    {/notempty}
+                    {/foreach}
+                    {/notempty}
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="__PLUGINS__/iCheck/icheck.min.js"></script>
+<!--<script src="__COMPONENTS__/datatables.net/js/jquery.dataTables.min.js"></script>-->
+<!--<script src="__COMPONENTS__/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>-->
+<script src="__PLUGINS__/jquery-treetable/jquery.treetable.js"></script>
+<script type="text/javascript">
+    menuJs.show('/admin/rule')
+    let check = {
+        init: function () {
+            $('input[type="checkbox"].minimal').iCheck({
+                checkboxClass: 'icheckbox_minimal-blue'
+            })
+            $('#select-all').on('ifChecked', function () {
+                $("input[name='rowId']").iCheck('check')
+            })
+            $('#select-all').on('ifUnchecked', function () {
+                $("input[name='rowId']").iCheck('uncheck')
+            })
+            $("table input[name='rowId']").on('ifChanged', function () {
+                if (check.getSelectIds().length == 0) {
+                    $('.delete-all').attr('disabled', true)
+                } else {
+                    $('.delete-all').attr('disabled', false)
+                }
+            })
+        },
+        getSelectIds: function () {
+            let ids = [];
+            $("table input:checked[name='rowId']").each(function () {
+                ids.push(parseInt($(this).val()));
+            });
+            return ids;
+        }
+    }
+    let rule = {
+        treeDataTable: null,
+        initTable: function (id) {
+            rule.treeDataTable = $("#" + id).treetable({
+                expandable: true,
+                indent: 30,
+                expanderTemplate: '<i class="fa fa-caret-right fa-lg"></i>',
+                stringCollapse: "折叠",
+                stringExpand: "展开",
+                onNodeExpand: function () {
+                    $("tr[data-tt-id=" + $(this)[0].id + "] > td > span > i").removeClass("fa-caret-right").addClass("fa-caret-down")
+                },
+                onNodeCollapse: function () {
+                    $("tr[data-tt-id=" + $(this)[0].id + "] > td > span > i").removeClass("fa-caret-down").addClass("fa-caret-right")
+                }
+            })
+        },
+        delete: function (id) {
+            $.modal.confirm({
+                msg: '确定删除数据吗？',
+                yes: function () {
+                    $.post("/admin/rule/delete", {id: id}, function (res) {
+                        if (res.code == 0) {
+                            window.location.reload()
+                        } else {
+                            $.modal.alert({
+                                msg: res.message
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    }
+    $(function () {
+        rule.initTable('table')
+    })
+</script>
+{/block}

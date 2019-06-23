@@ -20,7 +20,7 @@ table th, table td {
 .op-divider {
     display:inline-block;
     width: 1px;
-    margin: 0 8px;
+    margin: 0 5px;
     height: 0.9em;
     position:relative;
     top:-.06em;
@@ -39,6 +39,10 @@ table th, table td {
 }
 li.list-group-item {
     padding: 5px 15px;
+}
+form .required:before {
+    content: "*";
+    color: red;
 }
 /*modal*/
 .modal > .modal-dialog {

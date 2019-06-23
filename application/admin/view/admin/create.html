@@ -16,52 +16,37 @@
                 <div class="box-body">
                     <div class="form-group">
                         <label class="control-label col-sm-2 required">用户名</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon"><i class="fa fa-pencil"></i></div>
-                                <input name="username" type="text" class="form-control" value="">
-                            </div>
+                        <div class="col-sm-4">
+                            <input name="username" type="text" class="form-control" value="">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-2">昵称</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon"><i class="fa fa-pencil"></i></div>
-                                <input name="name" type="text" class="form-control" value="">
-                            </div>
+                        <label class="control-label col-sm-2 required">昵称</label>
+                        <div class="col-sm-4">
+                            <input name="name" type="text" class="form-control" value="">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-2">手机号</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon"><i class="fa fa-phone"></i></div>
-                                <input name="mobile" type="text" class="form-control" value="">
-                            </div>
+                        <label class="control-label col-sm-2 required">手机号</label>
+                        <div class="col-sm-4">
+                            <input name="mobile" type="text" class="form-control" value="">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-2">密码</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon"><i class="fa fa-eye-slash"></i></div>
-                                <input name="password" type="password" class="form-control" autocomplete="off">
-                            </div>
+                        <label class="control-label col-sm-2 required">密码</label>
+                        <div class="col-sm-4">
+                            <input name="password" type="password" class="form-control" autocomplete="off">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-2">确认密码</label>
-                        <div class="col-sm-6">
-                            <div class="input-group">
-                                <div class="input-group-addon"><i class="fa fa-eye-slash"></i></div>
-                                <input name="re_password" type="password" class="form-control" autocomplete="off">
-                            </div>
+                        <label class="control-label col-sm-2 required">确认密码</label>
+                        <div class="col-sm-4">
+                            <input name="re_password" type="password" class="form-control" autocomplete="off">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-2">角色</label>
-                        <div class="col-sm-6">
+                        <label class="control-label col-sm-2 required">角色</label>
+                        <div class="col-sm-4">
                             <div class="check-container">
                                 {foreach name="roleList" item="role"}
                                 <label class="control-label"><input name="roles[]" type="checkbox" class="minimal" value="{$role->id}"> {$role->name}</label>

@@ -40,10 +40,15 @@ Route::group('admin', function () {
             Route::post('/delete', 'Admin/delete');
         });
         Route::group('/rule', function () {
-            Route::get('/', 'Rule/index');
+            Route::get('/', 'AdminRule/index');
+            Route::get('/create', 'AdminRule/create');
+            Route::post('/create', 'AdminRule/save');
+            Route::get('/edit', 'AdminRule/edit');
+            Route::post('/edit', 'AdminRule/update');
+            Route::post('/delete', 'AdminRule/delete');
         });
         Route::group('/menu', function () {
-            Route::get('/', 'Menu/index');
+            Route::get('/', 'AdminMenu/index');
         });
     })->middleware(['Auth:admin', 'CheckRule', 'SetMenu']);
 })->prefix('admin/');

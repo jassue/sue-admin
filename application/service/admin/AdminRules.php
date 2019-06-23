@@ -33,7 +33,7 @@ class AdminRules
     {
         return AdminRule::create([
             'parent_id' => $parentId,
-            'title'     => $name,
+            'name'      => $name,
             'url'       => $url
         ]);
     }
@@ -95,16 +95,16 @@ class AdminRules
     /**
      * @param array $post
      */
-    public function edit(array $post)
+    public function update(array $post)
     {
         AdminRule::update($post);
     }
 
     /**
-     * @param array $ids
+     * @param int $id
      */
-    public function delete(array $ids)
+    public function delete(int $id)
     {
-        AdminRule::destroy($ids);
+        AdminRule::destroy($id);
     }
 }

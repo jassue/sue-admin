@@ -83,7 +83,7 @@ class AdminRoles
     {
         $data['id'] = $post['id'];
         isset($post['name']) && $data['name'] = $post['name'];
-        AdminRole::update($post);
+        AdminRole::update($data);
     }
 
     /**
