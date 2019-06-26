@@ -91,4 +91,31 @@ class AdminMenus
 
         return $menuList->toArray();
     }
+
+    /**
+     * @return array|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function getChildList()
+    {
+        return AdminMenu::with('child')->where('parent_id', 0)->select();
+    }
+
+    /**
+     * @param array $post
+     */
+    public function update(array $post)
+    {
+        AdminMenu::update($post);
+    }
+
+    /**
+     * @param int $id
+     */
+    public function delete(int $id)
+    {
+        AdminMenu::destroy($id);
+    }
 }

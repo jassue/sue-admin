@@ -35,7 +35,9 @@ table th, table td {
     font-weight: normal;
 }
 .help-block {
-    margin: 0px;
+    margin: 2px 0px 0px;
+    color: grey;
+    font-size: 0.9em;
 }
 li.list-group-item {
     padding: 5px 15px;

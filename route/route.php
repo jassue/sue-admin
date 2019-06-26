@@ -49,6 +49,11 @@ Route::group('admin', function () {
         });
         Route::group('/menu', function () {
             Route::get('/', 'AdminMenu/index');
+            Route::get('/create', 'AdminMenu/create');
+            Route::post('/create', 'AdminMenu/save');
+            Route::get('/edit', 'AdminMenu/edit');
+            Route::post('/edit', 'AdminMenu/update');
+            Route::post('/delete', 'AdminMenu/delete');
         });
     })->middleware(['Auth:admin', 'CheckRule', 'SetMenu']);
 })->prefix('admin/');

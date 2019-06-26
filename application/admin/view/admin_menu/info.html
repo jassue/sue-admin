@@ -1,0 +1,86 @@
+{extend name="layout/base" /}
+{block name="title"}{$title ?? '后台菜单'}{/block}
+{block name="pageHeader"}后台菜单{/block}
+{block name="description"}{$info ? '编辑' : '创建'}{/block}
+{block name="css"}
+<link rel="stylesheet" href="__PLUGINS__/iCheck/all.css">
+{/block}
+{block name="body"}
+<div class="row">
+    <div id="content" class="col-xs-12">
+        <div class="box box-info">
+            <div class="box-header">
+                <h3 class="box-title">{$info ? '编辑' : '创建'} <a href="javascript:history.go(-1)"><i class="fa fa-undo"></i></a></h3>
+            </div>
+            <form id="form" class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 required">上级菜单</label>
+                        <div class="col-sm-4">
+                            <select name="parent_id" class="form-control">
+                                <option value="0">顶级菜单</option>
+                                {foreach name="menuAllList" item="menuLevel1"}
+                                <option value="{$menuLevel1.id}" {eq name="parent_id" value="$menuLevel1.id"} selected {/eq}>&nbsp;&nbsp;&nbsp;&nbsp;{$menuLevel1.name}</option>
+                                {notempty name="menuLevel1.child"}
+                                    {foreach name="menuLevel1.child" item="menuLevel2"}
+                                    <option value="{$menuLevel2.id}" {eq name="parent_id" value="$menuLevel2.id"} selected {/eq}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$menuLevel2.name}</option>
+                                    {/foreach}
+                                {/notempty}
+                                {/foreach}
+                            </select>
+                            <span class="help-block">菜单最多为二级</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 required">名称</label>
+                        <div class="col-sm-4">
+                            <input name="name" type="text" class="form-control" value="{$info.name ?? ''}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">图标</label>
+                        <div class="col-sm-4">
+                            <input name="icon" type="text" class="form-control" value="{$info.icon ?? ''}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">链接</label>
+                        <div class="col-sm-4">
+                            <input name="url" type="text" class="form-control" value="{$info.url ?? ''}">
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    {notempty name="info"}
+                    <input name="id" type="hidden" value="{$info.id}">
+                    {/notempty}
+                    <button type="button" onclick="menu.submit()" class="btn btn-primary pull-right">提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="__PLUGINS__/iCheck/icheck.min.js"></script>
+<script src="__PLUGINS__/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+<script type="text/javascript">
+    menuJs.show('/admin/menu')
+    let menu = {
+        submit: function () {
+            $('.form-group').removeClass('has-error')
+            $('label.error').remove()
+            $.post("{$info ? '/admin/menu/edit' : '/admin/menu/create'}", $("#form").serialize() ,function (res) {
+                if (res.code == 0) {
+                    window.location.href = '/admin/menu'
+                } else {
+                    for (let key in res.message) {
+                        let node = $("[name=\'" + key + "\'], [name=\'"+ key + "[]" + "\']").parents('.form-group').addClass('has-error')
+                        node.children('label').after('<label class="control-label error"><i class="fa fa-times"></i> '+res.message[key]+'</label>')
+                    }
+                }
+            })
+        }
+    }
+</script>
+{/block}
