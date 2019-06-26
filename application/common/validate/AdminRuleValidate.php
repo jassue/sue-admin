@@ -36,11 +36,11 @@ class AdminRuleValidate extends BaseValidate
     public function sceneEdit()
     {
         return $this->only(['id'])
-            ->append('id', 'require|integer|egt:1|exists:admin_rule');
+            ->append('id', 'require|integer|egt:2|exists:admin_rule');
     }
 
     public function sceneUpdate()
     {
-        return $this->append('id', 'require|integer|egt:1|exists:admin_rule');
+        return $this->append('id', 'require|integer|egt:2|exists:admin_rule');
     }
 }
