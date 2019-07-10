@@ -160,4 +160,30 @@ class Admin extends AdminBaseController
         Admins::delete($ids);
         return $this->json(new SuccessResult());
     }
+
+    /**
+     * @return \think\response\View
+     */
+    public function profile()
+    {
+        return view('profile', [
+            'info' => Admins::getProfile(Admins::user())
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return \think\response\Json
+     */
+    public function setProfile(Request $request)
+    {
+        (new AdminValidate())->goCheck('updateProfile');
+        $args = $request->post();
+        if (empty($args['password']))
+            unset($args['password']);
+        if (empty($args['avatar']))
+            unset($args['avatar']);
+        Admins::updateProfile(Admins::user(), $args);
+        return $this->json(new SuccessResult());
+    }
 }

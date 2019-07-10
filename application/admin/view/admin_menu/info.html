@@ -72,7 +72,7 @@
             $('label.error').remove()
             $.post("{$info ? '/admin/menu/edit' : '/admin/menu/create'}", $("#form").serialize() ,function (res) {
                 if (res.code == 0) {
-                    window.location.href = '/admin/menu'
+                    window.location.href = '/admin/rule'
                 } else {
                     for (let key in res.message) {
                         let node = $("[name=\'" + key + "\'], [name=\'"+ key + "[]" + "\']").parents('.form-group').addClass('has-error')

@@ -13,6 +13,8 @@ use app\common\enum\BaseStatus;
 use app\common\model\Admin;
 use app\common\model\AdminRoleRelation;
 use app\common\model\BaseUser;
+use app\common\model\Image;
+use app\service\facade\UploadImage;
 use app\service\UserInterface;
 use think\facade\Session;
 
@@ -215,5 +217,39 @@ class Admins implements UserInterface
         $admin = $this->getById($id);
         $admin->roleIds = $admin->roles()->select()->column('id');
         return $admin;
+    }
+
+    /**
+     * @param Admin $admin
+     * @return Admin
+     */
+    public function getProfile(Admin $admin)
+    {
+        $admin->avatar;
+        $admin->avatar_sava_path = $admin->image ? $admin->image->path : '';
+        return $admin;
+    }
+
+    /**
+     * @param Admin $admin
+     * @param array $post
+     */
+    public function updateProfile(Admin $admin, array $post)
+    {
+        $admin->name = $post['name'];
+        $admin->mobile_phone = $post['mobile'];
+        isset($post['password']) && $admin->setPassword($post['password']);
+        if (isset($post['avatar'])) {
+            if (empty($admin->image)) {
+                $image = Image::create(['path' => $post['avatar']]);
+                $admin->avatar_id = $image->id;
+            } else {
+                UploadImage::deleteImage($admin->image->path);
+                $admin->image->path = $post['avatar'];
+                $admin->image->save();
+            }
+        }
+        $admin->save();
+        Session::set('admin', $this->getById($admin->id));
     }
 }

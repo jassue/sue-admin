@@ -10,6 +10,7 @@ namespace app\common\model;
 
 
 use app\common\enum\BaseStatus;
+use app\service\facade\UploadImage;
 
 class Admin extends BaseUser
 {
@@ -19,6 +20,14 @@ class Admin extends BaseUser
     public function roles()
     {
         return $this->belongsToMany(AdminRole::class, AdminRoleRelation::class, 'role_id', 'admin_id');
+    }
+
+    /**
+     * @return \think\model\relation\HasOne
+     */
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'id', 'avatar_id');
     }
 
     /**
@@ -55,5 +64,15 @@ class Admin extends BaseUser
     public function getLastLoginIpAttr($value)
     {
         return $value != 0 ? long2ip($value) : '';
+    }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    public function getAvatarAttr($value)
+    {
+        $avatar = $this->image;
+        return is_null($avatar) ? '/static/admin/img/default_avatar.png' : UploadImage::getUrl($avatar->path);
     }
 }

@@ -1,0 +1,143 @@
+{extend name="layout/base" /}
+{block name="title"}{$title ?? '个人设置'}{/block}
+{block name="pageHeader"}个人设置{/block}
+{block name="description"}{/block}
+{block name="css"}
+<link rel="stylesheet" href="__PLUGINS__/iCheck/all.css">
+<style type="text/css">
+    #avatar-containter {
+        width: 100px;
+        height: 100px;
+        position: relative;
+        background-repeat:no-repeat;
+        background-position: center;
+        background-size: 100px 100px;
+    }
+    #avatar-cover {
+        top: 0;
+        left: 0;
+        position:absolute;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: rgba(116,116,116,0.6);
+        display: none;
+        cursor: pointer;
+    }
+    #avatar-cover p {
+        line-height: 100px;
+        font-weight: bold;
+    }
+    #avatar-containter:hover > #avatar-cover {
+        display: block;
+    }
+</style>
+{/block}
+{block name="body"}
+<div class="row">
+    <div id="content" class="col-xs-12">
+        <div class="box box-info">
+            <div class="box-header">
+                <h3 class="box-title">个人设置</h3>
+            </div>
+            <form id="uploadForm" enctype="multipart/form-data" style="display: none">
+                <input id="image" name="image" type="file" onchange="admin.uploadAvatar()" value="">
+            </form>
+            <form id="form" class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2"></label>
+                        <div class="col-sm-4 text-center">
+                            <div id="avatar-containter" onclick="admin.openFileDialog()" class="img-circle center-block" style="background-image: url('{$info->avatar}')">
+                                <div id="avatar-cover">
+                                    <p>点击上传</p>
+                                </div>
+                            </div>
+                            <h3>{$info.name}</h3>
+                            <input id="avatar" name="avatar" type="hidden" class="form-control" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">用户名</label>
+                        <div class="col-sm-4">
+                            <input disabled type="text" class="form-control" value="{$info->username}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">昵称</label>
+                        <div class="col-sm-4">
+                            <input name="name" type="text" class="form-control" value="{$info->name}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">手机号</label>
+                        <div class="col-sm-4">
+                            <input name="mobile" type="text" class="form-control" value="{$info->mobile_phone}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">密码</label>
+                        <div class="col-sm-4">
+                            <input name="password" type="password" class="form-control" autocomplete="off" placeholder="不修改密码请留空">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">确认密码</label>
+                        <div class="col-sm-4">
+                            <input name="re_password" type="password" class="form-control" autocomplete="off" placeholder="不修改密码请留空">
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <button type="button" onclick="admin.setProfile()" class="btn btn-primary pull-right">提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="__PLUGINS__/iCheck/icheck.min.js"></script>
+<script type="text/javascript">
+    $('ol.breadcrumb').append('<li class="active">个人设置</li>')
+    let admin = {
+        openFileDialog: function () {
+            $('#image').click()
+        },
+        uploadAvatar: function () {
+            $.ajax({
+                url: "/admin/uploadImage",
+                method: "post",
+                data: new FormData($("#uploadForm")[0]),
+                processData: false, //不处理数据
+                contentType: false, //不设置Content-Type请求头
+                success: function (res) {
+                    if (res.code == 0) {
+                        $("#avatar-containter").css('background-image', "url("+res.data.url+")")
+                        $("#avatar").val(res.data.path)
+                    } else {
+                        $.modal.alert({
+                            msg: res.message
+                        })
+                    }
+                }
+            })
+        },
+        setProfile : function () {
+            $('.form-group').removeClass('has-error')
+            $('label.error').remove()
+            $.post('/admin/profile', $('#form').serialize() ,function (res) {
+                if (res.code == 0) {
+                    window.location.href = '/admin'
+                } else {
+                    for (let key in res.message) {
+                        let node = $("[name=\'" + key + "\'], [name=\'"+ key + "[]" + "\']").parents('.form-group').addClass('has-error')
+                        node.children('label').after('<label class="control-label error"><i class="fa fa-times"></i> '+res.message[key]+'</label>')
+                    }
+                }
+            })
+        },
+    }
+
+</script>
+{/block}

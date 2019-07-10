@@ -10,7 +10,7 @@ namespace app\common\validate;
 
 
 use app\common\enum\BaseStatus;
-use think\facade\Request;
+use app\service\facade\Admins;
 
 class AdminValidate extends BaseValidate
 {
@@ -48,7 +48,8 @@ class AdminValidate extends BaseValidate
         'roles.require' => '请选择角色',
         'roles.array' => '角色格式错误',
         'status.require' => '请选择状态',
-        'status.in' => '状态选择错误'
+        'status.in' => '状态选择错误',
+        'avatar.max' => '头像地址最多为160'
     ];
 
     public function sceneLogin()
@@ -78,5 +79,16 @@ class AdminValidate extends BaseValidate
             ->append('re_password', 'requireWith:password')
             ->append('id', 'require|integer|egt:2|exists:admin')
             ->append('status', 'require|in:' . BaseStatus::DISABLE . ',' . BaseStatus::ENABLE);
+    }
+
+    public function sceneUpdateProfile()
+    {
+        return $this->only(['name', 'mobile', 'password', 're_password', 'avatar'])
+            ->remove('mobile', 'unique')
+            ->remove('password', 'require')
+            ->remove('re_password', 'require')
+            ->append('re_password', 'requireWith:password')
+            ->append('mobile', 'unique:admin,mobile_phone,' . Admins::user()->id)
+            ->append('avatar', 'max:160');
     }
 }

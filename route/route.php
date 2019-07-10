@@ -18,6 +18,9 @@ Route::group('admin', function () {
     Route::get('/login', 'Admin/loginPage');
     Route::post('/login', 'Admin/login');
     Route::get('/logout', 'Admin/logout')->middleware('Auth:admin');
+    Route::get('/profile', 'Admin/profile')->middleware(['Auth:admin', 'SetMenu']);
+    Route::post('/profile', 'Admin/setProfile')->middleware(['Auth:admin', 'SetMenu']);
+    Route::post('/uploadImage', 'Common/uploadImage')->middleware('Auth:admin');
     Route::group('/', function () {
         Route::get('/', 'Index/index');
         Route::group('/role', function () {

@@ -3,7 +3,7 @@
 use think\migration\Migrator;
 use think\migration\db\Column;
 
-class CreateAdminTable extends Migrator
+class CreateImageTable extends Migrator
 {
     /**
      * Change Method.
@@ -28,26 +28,17 @@ class CreateAdminTable extends Migrator
      */
     public function up()
     {
-        $this->table('admin')
+        $this->table('image')
             ->setId(false)->setPrimaryKey('id')->setEngine('InnoDB')
             ->addColumn('id', 'biginteger', ['identity'=>true, 'signed'=>false])
-            ->addColumn('avatar_id', 'biginteger', ['default'=>0,'signed'=>false])
-            ->addColumn('username', 'string', ['limit'=>20, 'default'=>''])
-            ->addColumn('name', 'string', ['limit'=>20, 'default'=>''])
-            ->addColumn('password', 'string', ['limit'=>60, 'default'=>''])
-            ->addColumn('mobile_phone', 'string', ['limit'=>11, 'default'=>''])
-            ->addColumn('status', 'boolean', ['limit'=>1, 'default'=>1, 'signed'=>false])
-            ->addColumn('last_login_ip', 'integer', ['limit'=>20, 'default'=>0, 'signed'=>false])
-            ->addColumn('last_login_time', 'integer', ['limit'=>10, 'default'=>0, 'signed'=>false])
+            ->addColumn('path', 'string', ['limit'=>160, 'default'=>''])
             ->addColumn('create_time', 'integer', ['limit'=>10, 'signed'=>false])
             ->addColumn('update_time', 'integer', ['limit'=>10, 'signed'=>false])
-            ->addIndex('username', ['unique'=>true])
-            ->addIndex('mobile_phone', ['unique'=>true])
             ->create();
     }
 
     public function down()
     {
-        $this->dropTable('admin');
+        $this->dropTable('image');
     }
 }
