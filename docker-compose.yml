@@ -1,14 +1,42 @@
 version: '3'
 services:
   sue-admin:
-    image: webdevops/php-nginx:7.2
+    image: webdevops/php-nginx:7.3
     container_name: sue-admin
-    expose:
-    - "80"
+    ports:
+    - "80:80"
+#    - "443:443"
     environment:
-    - VIRTUAL_HOST=sueadmin.io
     - WEB_DOCUMENT_ROOT=/app/public
     volumes:
     - ./:/app
     - ./location_nginx.conf:/opt/docker/etc/nginx/vhost.common.d/10-location-root.conf
+    depends_on:
+    - mysql
+    - redis
+    network_mode: docker_network
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+    command: --sql-mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+    environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - LOGSPOUT=ignore
+    volumes:
+    - /home/docker/mysql/data:/var/lib/mysql
+    ports:
+    - "3306:3306"
+    network_mode: docker_network
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    command: redis-server --appendonly yes
+    environment:
+    - LOGSPOUT=ignore
+    volumes:
+    - /home/docker/redis/data:/data
+    ports:
+    - "6379:6379"
     network_mode: docker_network
