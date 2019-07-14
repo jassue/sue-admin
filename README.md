@@ -14,7 +14,7 @@ SueAdmin是一个整合了RBAC权限管理的基础后台管理系统，前端�
 
 第一步：安装代码
 ~~~
-https://github.com/mattsue/sue-admin.git
+git clone https://github.com/mattsue/sue-admin.git
 composer install
 ~~~
 
@@ -34,7 +34,7 @@ php think seed:run
 
 第一步：安装代码
 ~~~
-https://github.com/mattsue/sue-admin.git
+git clone https://github.com/mattsue/sue-admin.git
 ~~~
 
 第二步：创建并启动容器
@@ -50,4 +50,4 @@ sh init.sh
 ~~~
 
 ## 灵感 & 愿景
-2019.6 刚毕业，目前就职于一家小公司，本着学习态度开发此项目，之后我也会逐步加入新功能，近期内是不行了，因为公司目前用的Laravel框架，最近会在业余时间开发基于Laravel的项目，趁热打铁hhh~，顺便给大家安利一下Laravel，拓展包真的很丰富~。使用本系统过程中若是发现Bug或是有任何建议可以发邮件给我（mattsue15@163.com）,非常感谢！
+2019.6 刚毕业，目前就职于一家小公司，本着学习态度开发此项目，之后我也会逐步加入新功能，近期内是不行了，因为公司目前用的Laravel框架，最近会在业余时间开发基于Laravel的项目，趁热打铁hhh~，顺便给大家安利一下Laravel，拓展包真的很丰富~。使用本系统过程中若是发现Bug或是有任何建议可以发邮件给我（mattsue15@163.com），非常感谢！
