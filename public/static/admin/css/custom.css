@@ -1,3 +1,15 @@
+/*base*/
+.main-header .logo {
+    position: fixed;
+}
+.main-sidebar {
+    position: fixed;
+}
+@media (max-width: 767px) {
+    .main-header .logo {
+        position: relative;
+    }
+}
 /*index page*/
 ul.dropdown-menu {
     padding: 10px;

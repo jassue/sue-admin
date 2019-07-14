@@ -17,6 +17,11 @@ use think\Request;
 
 class Common extends AdminBaseController
 {
+    /**
+     * @param Request $request
+     * @return \think\response\Json
+     * @throws BusinessException
+     */
     public function uploadImage(Request $request)
     {
         $validate = Validate::make(
