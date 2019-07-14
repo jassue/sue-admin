@@ -9,6 +9,8 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
+use \think\facade\Env;
+
 // +----------------------------------------------------------------------
 // | 会话设置
 // +----------------------------------------------------------------------
@@ -24,9 +26,9 @@ return [
     // 是否自动开启 SESSION
     'auto_start'     => true,
     // redis主机
-    'host' => 'redis',
+    'host' => Env::get('redis_host'),
     // redis端口
-    'port' => 6379,
+    'port' => Env::get('redis_port'),
     // 密码
-    'password' => '',
+    'password' => Env::get('redis_password'),
 ];
